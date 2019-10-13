@@ -20,36 +20,42 @@ class Reader:
         print("total:" + str(self.imagesTotal))
         print("Row/Col: " + str(self.imagesRow)+"/"+str(self.imagesCol))
 
-        self.array = [[0 for x in range( self.imagesRow)] for y in range( self.imagesRow)]
+        self.array = [[0 for x in range(self.imagesRow)]
+                      for y in range(self.imagesRow)]
 
     def displayImageConsole(self, position):
-        self.getImageArray2D(position,self.array)
+        self.getImageArray2D1(position, self.array)
         for k in range(0, 28):
             for j in range(0, 28):
                 print("%2s" % self.array[k][j].hex(), end="", flush=True)
             print()
 
-    def getImageArray2D(self,position,array):
+    def getImageArray2D1(self, position, array):
         pos = 16 + (position-1)*28*28
         for k in range(0, 28):
             for j in range(0, 28):
-                #array[k][j] = int.from_bytes(file_content[pos:pos+1], byteorder='big')
-                self.array[k][j] = self.images[pos:pos+1]
+                array[k][j] = int.from_bytes(
+                    self.images[pos:pos+1], byteorder='big')
+                #array[k][j] = self.images[pos:pos+1]
                 pos = pos+1
 
-    def getImmageArray2D(self,position):
-        getImageArray2D(position,array)
+    def getImageArray2D2(self, position):
+        getImageArray2D1(position, self.array)
         return self.array
 
-    def getLabel(self,position):
+    def getLabel(self, position):
         return int.from_bytes(self.labels[position+7:position+8], byteorder='big')
 
-    def printLabel(self,position):
-        print (str(self.getLabel(position)))
+    def printLabel(self, position):
+        print(str(self.getLabel(position)))
+
+    def getArray(self):
+        return self.array
 
 
-reader = Reader('../mnist/train-labels-idx1-ubyte.gz',
-                '../mnist/train-images-idx3-ubyte.gz')
-reader.printLabel(60000)
-reader.displayImageConsole(60000)
-# C:\Users\pepe\Anaconda3zpython
+# reader = Reader('../mnist/train-labels-idx1-ubyte.gz',
+#                 '../mnist/train-images-idx3-ubyte.gz')
+# reader.printLabel(60000)
+# reader.displayImageConsole(60000)
+
+# C:\Users\pepe\Anaconda3\python
