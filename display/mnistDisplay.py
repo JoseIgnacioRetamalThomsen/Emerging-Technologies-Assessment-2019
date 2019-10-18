@@ -19,8 +19,8 @@ reader = r.Reader('../mnist/train-labels-idx1-ubyte.gz',
 
 image = [[0 for x in range(28)]
          for y in range(28)]
-reader.getImageArray2D1(5678, image)
-
+reader.getImageArray2D1(471, image)
+reader.printLabel(471)
 for k in range(0, 28):
     for j in range(0, 28):
         number = image[k][j]
