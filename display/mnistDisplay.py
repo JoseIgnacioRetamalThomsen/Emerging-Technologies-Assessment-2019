@@ -14,13 +14,13 @@ w.pack()
 x1, y1, x2, y2 = 0, 0, 10, 10
 #x2, y2 = 10, 10
 
-reader = r.Reader('../mnist/train-labels-idx1-ubyte.gz',
-                  '../mnist/train-images-idx3-ubyte.gz')
+reader = r.Reader('../mnist/t10k-labels-idx1-ubyte.gz',
+                  '../mnist/t10k-images-idx3-ubyte.gz')
 
 image = [[0 for x in range(28)]
          for y in range(28)]
-reader.getImageArray2D1(471, image)
-reader.printLabel(471)
+reader.getImageArray2D1(1233, image)
+reader.printLabel(1233)
 for k in range(0, 28):
     for j in range(0, 28):
         number = image[k][j]
@@ -32,3 +32,5 @@ for k in range(0, 28):
 
 
 mainloop()
+#predict number 61?
+#fail at 1233
