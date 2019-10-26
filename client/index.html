@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+
+<html>
+    <script src="https://code.jquery.com/jquery-3.1.0.min.js"></script>
+    <head>
+		<meta charset="UTF-8">
+		<title>Canvas</title>
+		<style type="text/css">
+			body {
+				background-color: white;
+			}
+			canvas {
+				border-style: solid;
+				border-width: 2px;
+			}
+		</style>
+    </head>
+    
+    <body>
+        <canvas id="inputCanvas"></canvas>
+
+        <script type="text/javascript">
+        
+            var canvas = document.getElementById("inputCanvas");
+
+            var canvasSize = {
+				width: 800,
+				height: 800
+			}
+
+            // Get a 2D context for the canvas.
+			var ctx = canvas.getContext("2d");
+			//change size of canvas.
+			canvas.width = canvasSize.width;
+			canvas.height = canvasSize.height;
+
+            $(document).on('click touchstart', function () {console.log("touch")});
+        </script>
+    </body>
+</html>
