@@ -1,40 +1,153 @@
 <!DOCTYPE html>
 
 <html>
-    <script src="https://code.jquery.com/jquery-3.1.0.min.js"></script>
-    <head>
-		<meta charset="UTF-8">
-		<title>Canvas</title>
-		<style type="text/css">
-			body {
-				background-color: white;
-			}
-			canvas {
-				border-style: solid;
-				border-width: 2px;
-			}
-		</style>
-    </head>
-    
-    <body>
-        <canvas id="inputCanvas"></canvas>
+<script src="https://code.jquery.com/jquery-3.1.0.min.js"></script>
 
-        <script type="text/javascript">
-        
-            var canvas = document.getElementById("inputCanvas");
+<head>
+    <meta charset="UTF-8">
+    <title>Canvas</title>
+    <style type="text/css">
+        body {
+            background-color: white;
+        }
 
-            var canvasSize = {
-				width: 800,
-				height: 800
-			}
+        canvas {
+            border-style: solid;
+            border-width: 2px;
+        }
+    </style>
+</head>
 
-            // Get a 2D context for the canvas.
-			var ctx = canvas.getContext("2d");
-			//change size of canvas.
-			canvas.width = canvasSize.width;
-			canvas.height = canvasSize.height;
+<body>
+    <canvas id="inputCanvas"></canvas>
 
-            $(document).on('click touchstart', function () {console.log("touch")});
-        </script>
-    </body>
+    <script type="text/javascript">
+
+
+        //get canvas from DOM
+        var canvas = document.getElementById("inputCanvas");
+
+        //size of the canvas
+        var canvasSize = {
+            width: 280,
+            height: 280
+        }
+
+        //position of canvas for calulate offset
+        var canvasPosition = {
+            x: canvas.offsetLeft,
+            y: canvas.offsetTop
+        }
+
+        //radius of the circvle for drawing
+        var radius = 10;
+        //colour for drawing
+        var colour = '#000000';
+
+        //change size of canvas.
+        canvas.width = canvasSize.width;
+        canvas.height = canvasSize.height;
+
+        // Get a 2D context for the canvas.
+        var ctx = canvas.getContext("2d");
+
+        //draw a circle
+        ctx.drawCircle = function (x, y, r, color) {
+            this.fillStyle = color;
+            this.beginPath();
+            this.moveTo(x, y);
+            this.arc(x, y, r, 0, Math.PI * 2, false);
+            this.fill();
+        };
+
+        //keep track last circle drawed position.
+        var x, y, lastX, lastY;
+
+        $(document).on('mousedown touchstart', function (e) {
+
+            canvas.isDrawing = true;
+            lastX = e.pageX - canvasPosition.x;
+            lastY = e.pageY - canvasPosition.y;
+
+        });
+
+
+        var space = radius/2;
+        $(document).on('mousemove touchmove', function (e) {
+
+            if (!canvas.isDrawing) {
+                return;
+            }
+
+            //get actual x and y position of mouse or touch
+            x = e.pageX - canvasPosition.x;
+            y = e.pageY - canvasPosition.y;
+
+            //   var fillColor = colour;
+            ctx.drawCircle(x, y, radius, colour);
+
+            //distance beetwen this and last draw
+            var distance = Math.sqrt(Math.pow((lastX - x), 2) + Math.pow(lastY - y, 2));
+
+            // if the distance is bigger than the radius we will draw circles between the 2 points.
+            if (distance > space) {
+                
+                //slope
+                var s = (y - lastY) / (x - lastX);
+
+                //horizontal
+                if (Math.abs(s) < 1) {
+                    
+                    var start = lastX;
+                    //rigth left
+                    if (lastX < x) {
+                        while (start < x) {
+                            var y1 = s * (start - lastX) + lastY;
+                            ctx.drawCircle(start, y1, radius, colour);
+                            start += space;
+                        }
+                    }
+                    //left right
+                    else {
+                        while (start > x) {
+                            var y1 = s * (start - lastX) + lastY;
+                           ctx.drawCircle(start, y1, radius, colour);
+                            start -= space;
+                        }
+                    }
+                }
+                //vertical
+                else {
+                    var start = lastY;
+                    // up down
+                    if (lastY < y) {
+                        while (start < y) {
+                            var x1 = (start - lastY) / s + lastX;
+                            ctx.drawCircle(x1, start, radius, colour);
+                            start += space;
+                        }
+                    }
+                    // down up
+                    else {
+                        while (start > y) {
+                            var x1 = (start - lastY) / s + lastX;
+                            ctx.drawCircle(x1, start, radius, colour);
+                            start -= space;
+                        }
+                    }
+                }
+
+            }
+            lastX = x;
+            lastY = y;
+        }
+        );
+
+        $(document).on('mouseup touchend', function (e) {
+            canvas.isDrawing = false;
+        }
+        );
+    </script>
+</body>
+
 </html>
