@@ -20,6 +20,8 @@
 
 <body>
     <canvas id="inputCanvas"></canvas>
+    <button id="clearButton">Clear</button>
+    <button id="processButton">Process</button>
 
     <script type="text/javascript">
 
@@ -71,8 +73,9 @@
 
         });
 
+        //min space between circles.
+        canvas.space = radius / 2;
 
-        var space = radius/2;
         $(document).on('mousemove touchmove', function (e) {
 
             if (!canvas.isDrawing) {
@@ -90,29 +93,29 @@
             var distance = Math.sqrt(Math.pow((lastX - x), 2) + Math.pow(lastY - y, 2));
 
             // if the distance is bigger than the radius we will draw circles between the 2 points.
-            if (distance > space) {
-                
+            if (distance > canvas.space) {
+
                 //slope
                 var s = (y - lastY) / (x - lastX);
 
                 //horizontal
                 if (Math.abs(s) < 1) {
-                    
+
                     var start = lastX;
                     //rigth left
                     if (lastX < x) {
                         while (start < x) {
                             var y1 = s * (start - lastX) + lastY;
                             ctx.drawCircle(start, y1, radius, colour);
-                            start += space;
+                            start += canvas.space;
                         }
                     }
                     //left right
                     else {
                         while (start > x) {
                             var y1 = s * (start - lastX) + lastY;
-                           ctx.drawCircle(start, y1, radius, colour);
-                            start -= space;
+                            ctx.drawCircle(start, y1, radius, colour);
+                            start -= canvas.space;
                         }
                     }
                 }
@@ -124,7 +127,7 @@
                         while (start < y) {
                             var x1 = (start - lastY) / s + lastX;
                             ctx.drawCircle(x1, start, radius, colour);
-                            start += space;
+                            start += canvas.space;
                         }
                     }
                     // down up
@@ -132,7 +135,7 @@
                         while (start > y) {
                             var x1 = (start - lastY) / s + lastX;
                             ctx.drawCircle(x1, start, radius, colour);
-                            start -= space;
+                            start -= canvas.space;
                         }
                     }
                 }
@@ -140,13 +143,49 @@
             }
             lastX = x;
             lastY = y;
-        }
-        );
+        });
+
+
 
         $(document).on('mouseup touchend', function (e) {
             canvas.isDrawing = false;
-        }
-        );
+        });
+
+
+
+        $(document).ready(function () {
+            $("#clearButton").click(function () {
+                console.log("Clear");
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+            });
+        });
+
+        $(document).ready(function () {
+            $("#processButton").click(function () {
+                console.log("Processing");
+                var img = [];
+                for (var n = 0, cc=0; n < canvas.width; n += 10,cc++) {
+                    img[cc] = [];
+                    for (var m = 0; m < canvas.height; m += 10) {
+                        var iData = ctx.getImageData(n, m, 10, 10);
+                        var c = 0;
+
+                        for (i = 0; i < iData.data.length; i += 4) {
+                            if (iData.data[i + 3] > 0) c++;
+                        }
+                        // console.log(c);
+                        img[cc].push(parseInt((255 * (c / 100))));
+                    }
+                }
+                console.log(img[0].length);
+                for (var i = 0; i < 28; i++) {
+                    console.log(img[i]);
+                }
+                console.log(img);
+            });
+        });
+
+
     </script>
 </body>
 
