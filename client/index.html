@@ -74,7 +74,7 @@
         });
 
         //min space between circles.
-        canvas.space = radius / 2;
+        canvas.space = radius/2;
 
         $(document).on('mousemove touchmove', function (e) {
 
@@ -94,7 +94,13 @@
 
             // if the distance is bigger than the radius we will draw circles between the 2 points.
             if (distance > canvas.space) {
+                ctx.beginPath();
+                ctx.moveTo(lastX, lastY);
+                ctx.lineWidth = radius*2;
+                ctx.lineTo(x, y);
 
+                ctx.stroke();
+/*
                 //slope
                 var s = (y - lastY) / (x - lastX);
 
@@ -139,7 +145,7 @@
                         }
                     }
                 }
-
+*/
             }
             lastX = x;
             lastY = y;
@@ -164,7 +170,7 @@
             $("#processButton").click(function () {
                 console.log("Processing");
                 var img = [];
-                for (var n = 0, cc=0; n < canvas.width; n += 10,cc++) {
+                for (var n = 0, cc = 0; n < canvas.width; n += 10, cc++) {
                     img[cc] = [];
                     for (var m = 0; m < canvas.height; m += 10) {
                         var iData = ctx.getImageData(n, m, 10, 10);
