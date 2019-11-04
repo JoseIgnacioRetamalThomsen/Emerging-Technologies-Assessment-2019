@@ -3,6 +3,8 @@ import numpy as np
 import keras as kr
 import sklearn.preprocessing as pre
 import matplotlib.pyplot as plt
+from keras.models import load_model
+
 
 # Start a neural network, building it by layers.
 model = kr.models.Sequential()
@@ -46,6 +48,7 @@ test_lbl =  np.array(list(test_lbl[ 8:])).astype(np.uint8)
 
 (encoder.inverse_transform(model.predict(test_img)) == test_lbl).sum()
 
+#loss_and_metrics = model.evaluate(test_img, test_lbl, batch_size=100)
 
 
 result = model.predict(test_img[1:2])
@@ -54,4 +57,5 @@ print(result)
 
 plt.imshow(test_img[1].reshape(28, 28), cmap='gray')
 print("done")
+model.save("first.h5")
 
