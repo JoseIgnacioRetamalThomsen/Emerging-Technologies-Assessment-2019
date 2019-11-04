@@ -52,6 +52,7 @@ test_lbl =  np.array(list(test_lbl[ 8:])).astype(np.uint8)
 
 
 result = model.predict(test_img[1:2])
+print(test_img[1:2])
 print(result)
 
 
