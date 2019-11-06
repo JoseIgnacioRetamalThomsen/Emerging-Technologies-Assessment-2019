@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+
+<html>
+<script src="https://code.jquery.com/jquery-3.1.0.min.js"></script>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Canvas</title>
+    <style type="text/css">
+        body {
+            background-color: white;
+        }
+
+        canvas {
+            border-style: solid;
+            border-width: 2px;
+        }
+    </style>
+</head>
+
+<body>
+    <canvas id="inputCanvas"></canvas>
+    <button id="clearButton">Clear</button>
+    <button id="processButton">Process</button>
+
+    <script type="text/javascript">
+
+
+        //get canvas from DOM
+        var canvas = document.getElementById("inputCanvas");
+
+        //size of the canvas
+        var canvasSize = {
+            width: 280,
+            height: 280
+        }
+
+        //position of canvas for calulate offset
+        var canvasPosition = {
+            x: canvas.offsetLeft,
+            y: canvas.offsetTop
+        }
+
+        //radius of the circvle for drawing
+        var radius = 15;
+        //colour for drawing
+        var colour = '#000000';
+
+        //change size of canvas.
+        canvas.width = canvasSize.width;
+        canvas.height = canvasSize.height;
+
+        // Get a 2D context for the canvas.
+        var ctx = canvas.getContext("2d");
+
+        //draw a circle
+        ctx.drawCircle = function (x, y, r, color) {
+            this.fillStyle = color;
+            this.beginPath();
+            this.moveTo(x, y);
+            this.arc(x, y, r, 0, Math.PI * 2, false);
+            this.fill();
+        };
+
+        //keep track last circle drawed position.
+        var x, y, lastX, lastY;
+
+        $(document).on('mousedown touchstart', function (e) {
+
+            canvas.isDrawing = true;
+            lastX = e.pageX - canvasPosition.x;
+            lastY = e.pageY - canvasPosition.y;
+
+        });
+
+        //min space between circles.
+        canvas.space = radius / 2;
+
+        $(document).on('mousemove touchmove', function (e) {
+
+            if (!canvas.isDrawing) {
+                return;
+            }
+
+            //get actual x and y position of mouse or touch
+            x = e.pageX - canvasPosition.x;
+            y = e.pageY - canvasPosition.y;
+
+            //   var fillColor = colour;
+            ctx.drawCircle(x, y, radius, colour);
+
+            //distance beetwen this and last draw
+            var distance = Math.sqrt(Math.pow((lastX - x), 2) + Math.pow(lastY - y, 2));
+
+            // if the distance is bigger than the radius we will draw circles between the 2 points.
+            if (distance > canvas.space) {
+                ctx.beginPath();
+                ctx.moveTo(lastX, lastY);
+                ctx.lineWidth = radius * 2;
+                ctx.lineTo(x, y);
+
+                ctx.stroke();
+                /*
+                                //slope
+                                var s = (y - lastY) / (x - lastX);
+                
+                                //horizontal
+                                if (Math.abs(s) < 1) {
+                
+                                    var start = lastX;
+                                    //rigth left
+                                    if (lastX < x) {
+                                        while (start < x) {
+                                            var y1 = s * (start - lastX) + lastY;
+                                            ctx.drawCircle(start, y1, radius, colour);
+                                            start += canvas.space;
+                                        }
+                                    }
+                                    //left right
+                                    else {
+                                        while (start > x) {
+                                            var y1 = s * (start - lastX) + lastY;
+                                            ctx.drawCircle(start, y1, radius, colour);
+                                            start -= canvas.space;
+                                        }
+                                    }
+                                }
+                                //vertical
+                                else {
+                                    var start = lastY;
+                                    // up down
+                                    if (lastY < y) {
+                                        while (start < y) {
+                                            var x1 = (start - lastY) / s + lastX;
+                                            ctx.drawCircle(x1, start, radius, colour);
+                                            start += canvas.space;
+                                        }
+                                    }
+                                    // down up
+                                    else {
+                                        while (start > y) {
+                                            var x1 = (start - lastY) / s + lastX;
+                                            ctx.drawCircle(x1, start, radius, colour);
+                                            start -= canvas.space;
+                                        }
+                                    }
+                                }
+                */
+            }
+            lastX = x;
+            lastY = y;
+        });
+
+
+
+        $(document).on('mouseup touchend', function (e) {
+            canvas.isDrawing = false;
+        });
+
+
+
+        $(document).ready(function () {
+            $("#clearButton").click(function () {
+                console.log("Clear");
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+            });
+        });
+
+        $(document).ready(function () {
+            $("#processButton").click(function () {
+                /// console.log("Processing");
+                var img = [];
+                for (var n = 0, cc = 0; n < canvas.width; n += 10, cc++) {
+                    img[cc] = [];
+                    for (var m = 0; m < canvas.height; m += 10) {
+                        var iData = ctx.getImageData(m, n, 10, 10);
+                        var c = 0;
+
+                        for (i = 0; i < iData.data.length; i += 4) {
+                            if (iData.data[i + 3] > 0) c++;
+                        }
+                        // console.log(c);
+                        img[cc].push(parseInt((255 * (c / 100))));
+                    }
+                }
+                //console.log(img[0].length);
+                //for (var i = 0; i < 28; i++) {
+                //  console.log(img[i]);
+                //}
+                //  console.log(img);
+                /*
+                                $.ajax({
+                                    type: 'POST',
+                                    url: "http://127.0.0.1:5000/",
+                                    contentType: 'application/json;charset=UTF-8',
+                                    data: { 'data': img }
+                                });
+                */
+                var data = { "name": "John Doe" }
+                $.ajax({
+                    url: 'http://127.0.0.1:5000/reco',
+                    data: JSON.stringify(img),
+                    contentType: 'application/json;charset=UTF-8',
+                    type: 'POST',
+                    success: function (response) {
+                        console.log("no error")
+                        console.log(response);
+                    },
+                    error: function (error) {
+                        console.log("error")
+                        console.log(error);
+                    }
+                });
+            });
+        });
+
+
+    </script>
+</body>
+
+</html>
