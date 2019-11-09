@@ -126,3 +126,6 @@ dmypy.json
 
 # ignore data set
 mnist/
+
+#ignore saved models
+models

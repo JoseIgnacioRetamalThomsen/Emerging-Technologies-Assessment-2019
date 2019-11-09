@@ -1,8 +1,6 @@
-
 #modified from : https://palletsprojects.com/p/flask/
 import gzip
 import numpy as np
-import keras as kr
 import sklearn.preprocessing as pre
 import matplotlib.pyplot as plt
 from keras.models import load_model
@@ -14,60 +12,39 @@ import json
 from flask_cors import CORS
 from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
 from matplotlib.figure import Figure
+from keras.layers import Dense, Dropout, Flatten
+import concurrent.futures
+import urllib.request
 
 #logging.basicConfig(level=logging.DEBUG)
 
 app = fl.Flask(__name__)
 CORS(app)
+#app.run(host="127.0.0.1",port=5000,threaded=False)
 
-model = load_model('./models/first.h5')
+model = load_model('./models/CRAZY.h5')
+
 
 @app.route("/reco", methods=["GET", "POST"])
 def process():
 
-
  
-    
-    
+   #global graph
+    #graph = tf.get_default_graph()
+
+
     if request.method == "POST": 
         
-        data = json.loads(request.data)
-        
-        image = []
-        i =0
-        j =0
-        for key in data:
-            for mx in key:
-                image.append(mx)
-                
-                j += 1
-            i += 1
-            j=0
-        #print(data)
-        f = open("demofile0.txt", "a")
-        for i in image:
-            f.write(f'{str(i)} ')
-        f.close()
-      #  plt.imshow(image, cmap='gray')
-        ##print(image)
+        #get data from request then convert it into a  28x28 np array
+        image = np.array(json.loads(request.data))
+                 
+        # reshape image
         finalImg  = ~np.array(list(image)).reshape(1, 784).astype(np.uint8) / 255.0
-        ii=0
+        #finalImg = np.reshape(1, 784)
 
-        for nn in finalImg[0]:
-            if nn == 1 :
-                print(" %s " % "0", end="", flush=True)
-            else:
-                print(" %s " % "x", end="", flush=True)
-            ii += 1
-            if ii == 28:
-                print()
-                ii=0
-        
-        plt.imshow(finalImg, cmap='gray')
-     
-      #  plt.show()
-        result = model.predict(finalImg)
-      #  print(result)
+        # make prediction
+        result = model.predict(finalImg) 
+  
         high =0
         num =0
         pos = 0
@@ -78,9 +55,20 @@ def process():
             pos +=1
         print(num)
 
+        # with concurrent.futures.ThreadPoolExecutor(max_workers=1) as executor:
+        #     future = executor.submit(make_prediction,finalImg)
+        #     print(future.result())
 
     return f'Hello, !'
 
- 
+
+def make_prediction(img):
+    model = load_model('./models/t1.h5')
+    result = model.predict(img)
+    return result
+
+
 if __name__ == '__main__':
     app.run(debug=True)
+
+

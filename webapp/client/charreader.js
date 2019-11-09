@@ -28,9 +28,6 @@ canvas.height = canvasSize.height;
 // Get a 2D context for the canvas.
 var ctx = canvas.getContext("2d");
 
-ctx.fillStyle='blue';
-ctx.fillRect(0,0,canvas.width,canvas.height);
-
 //keep track last circle drawed position.
 var x, y, lastX, lastY;
 
@@ -53,6 +50,8 @@ ctx.drawCircle = function (x, y, r, color) {
 //is mouse is down we start drawing
 $(document).on('mousedown touchstart', function (e) {
 
+ 
+
     canvas.isDrawing = true;
 
     //get mouase position relative to canvas
@@ -66,6 +65,11 @@ $(document).on('mousedown touchstart', function (e) {
 
 //draw
 $(document).on('mousemove touchmove', function (e) {
+
+
+    canvasPosition.x = canvas.offsetLeft ;
+    
+        canvasPosition.y= canvas.offsetTop;
 
     //only draw after mouse is down
     if (!canvas.isDrawing) {

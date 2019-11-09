@@ -59,5 +59,4 @@ print(result)
 plt.imshow(test_img[1].reshape(28, 28), cmap='gray')
 plt.show()
 print("done")
-model.save("first.h5")
-
+#model.save("first.h5")
