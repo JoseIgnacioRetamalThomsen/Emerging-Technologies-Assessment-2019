@@ -18,13 +18,43 @@
 <body>
     <div class="container">
 
+        <div class="jumbotron">
+            <h1 class="display-4">Manual Writing Digits reco</h1>
+            <p class="lead">This is a simple hero unit, a simple jumbotron-style component for calling extra attention
+                to featured content or information.</p>
+            <hr class="my-4">
+            
+            <canvas id="inputCanvas" style="border: 1px solid black;"></canvas>
+
+            <div class="container px-lg-5">
+                <div class="row mx-lg-n5">
+                    <div class="col py-3 px-lg-5 border bg-light">
+                          
+                        <form>
+                            <div class="form-group">
+                                <label for="formControlRange">Select Size</label>
+                                <input type="range"  min="5" max="15" class="form-control-range" id="formControlRange">
+                            </div>
+                        </form>
+                 
+
+                        <button type="button" class="btn btn-danger" id="clearButton">Danger</button>
+                        <button type="button" class="btn btn-primary" id="processButton">Primary</button>
+                    </div>
+                    <div class="col py-3 px-lg-5 border bg-light">
+                        <p>It uses utility classes for typography and spacing to space content out within the larger
+                            container.</p>
+                    </div>
+                </div>
+            </div>
+
+
+
+        </div>
 
         <h1>Hello, world!</h1>
-        <canvas id="inputCanvas" style="border: 1px solid black;"></canvas>
-  
-        <button type="button" class="btn btn-danger" id="clearButton">Danger</button>
-        <button type="button" class="btn btn-primary" id="processButton">Primary</button>
-     
+   
+
     </div>
 
 

@@ -132,19 +132,7 @@ $(document).ready(function () {
                 img[cc].push(parseInt((255 * (c / 100))));
             }
         }
-        //console.log(img[0].length);
-        //for (var i = 0; i < 28; i++) {
-        //  console.log(img[i]);
-        //}
-        //  console.log(img);
-        /*
-                        $.ajax({
-                            type: 'POST',
-                            url: "http://127.0.0.1:5000/",
-                            contentType: 'application/json;charset=UTF-8',
-                            data: { 'data': img }
-                        });
-        */
+        
         img = processImage();
         console.log(img);
         $.ajax({
@@ -163,9 +151,19 @@ $(document).ready(function () {
         });
     });
 });
+$(document).ready(function () {
+$('#formControlRange').on('input change',function (e) {
+    console.log($(this).val());
+    radius = parseInt($(this).val());
+
+});
+});
 
 function processImage(a){
     
+    
+ 
+
     //declare array
     var img = [];
         for (var n = 0, cc = 0; n < canvas.width+20; n += 10, cc++) {
