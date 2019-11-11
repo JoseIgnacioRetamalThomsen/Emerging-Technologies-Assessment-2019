@@ -187,7 +187,8 @@ function processImage(a){
                 if(n==0||n==0 ||m==0||m==0){
                     img[cc].push(0);
                 }else{
-                img[cc].push(parseInt((255 * (c / 100))));
+                    
+                img[cc].push(parseInt(255*(c/100)) );
                 }
             }
         }

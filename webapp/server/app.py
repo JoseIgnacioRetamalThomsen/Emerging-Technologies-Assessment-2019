@@ -27,7 +27,7 @@ CORS(app)
 #import the model
 # Ignore dropout at inference
 tf.keras.backend.set_learning_phase(0)
-model = load_model('../../models/55_33_22_124_10_9941.h5')
+model = load_model('../../models/cnn7776532.h5')
 
 @app.route("/reco", methods=["GET", "POST"])
 def process():
@@ -40,14 +40,26 @@ def process():
     if request.method == "POST": 
         
         #get data from request then convert it into a  28x28 np array
+        print(request.data)
+       # print(np.array([254]).astype("byte"))
         image = np.array(json.loads(request.data))
-        
+        print(image)
+        c = 0
+        for i in image:
+            image[c] = 255-i
+            c += 1
+        print(image)
         image = np.array(image)
         image = image.reshape(1,28,28,1)
+        image = image.astype('float32')
+        image /= 255
+        count =0
+        print(image)
+      
         #image = image.reshape(28,28)
         #finalImg = finalImg.astype('float32')
-        
-        finalImg = image/255
+      # print(image)
+        finalImg = image
        
 
         # reshape image

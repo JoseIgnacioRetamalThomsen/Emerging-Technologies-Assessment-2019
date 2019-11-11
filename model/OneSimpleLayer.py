@@ -10,6 +10,7 @@ from keras.layers import Dense, Dropout, Flatten
 (x_train, y_train), (x_test, y_test) = mnist.load_data()
 
 inputs = ~np.array(x_train).reshape(60000,784)/255.0
+
 inputs = inputs.astype('float32')
 
 
