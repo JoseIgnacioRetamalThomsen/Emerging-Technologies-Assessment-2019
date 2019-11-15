@@ -50,7 +50,7 @@ ctx.drawCircle = function (x, y, r, color) {
 //is mouse is down we start drawing
 $(document).on('mousedown touchstart', function (e) {
 
- 
+
 
     canvas.isDrawing = true;
 
@@ -67,9 +67,9 @@ $(document).on('mousedown touchstart', function (e) {
 $(document).on('mousemove touchmove', function (e) {
 
 
-    canvasPosition.x = canvas.offsetLeft ;
-    
-        canvasPosition.y= canvas.offsetTop;
+    canvasPosition.x = canvas.offsetLeft;
+
+    canvasPosition.y = canvas.offsetTop;
 
     //only draw after mouse is down
     if (!canvas.isDrawing) {
@@ -94,7 +94,7 @@ $(document).on('mousemove touchmove', function (e) {
         ctx.lineTo(x, y);
 
         ctx.stroke();
-          }
+    }
 
     // save position for next iteration      
     lastX = x;
@@ -112,10 +112,10 @@ $(document).ready(function () {
     $("#clearButton").click(function () {
         console.log("Clear");
         ctx.clearRect(0, 0, canvas.width, canvas.height);
-    });
-});
 
-$(document).ready(function () {
+    });
+
+
     $("#processButton").click(function () {
         /// console.log("Processing");
         var img = [];
@@ -132,7 +132,7 @@ $(document).ready(function () {
                 img[cc].push(parseInt((255 * (c / 100))));
             }
         }
-        
+
         img = processImage();
         console.log(img);
         $.ajax({
@@ -148,49 +148,49 @@ $(document).ready(function () {
                 console.log("error")
                 console.log(error);
             }
+
         });
     });
-});
-$(document).ready(function () {
-$('#formControlRange').on('input change',function (e) {
-    console.log($(this).val());
-    radius = parseInt($(this).val());
+
+    $('#formControlRange').on('input change', function (e) {
+        console.log($(this).val());
+        radius = parseInt($(this).val());
+    });
 
 });
-});
 
-function processImage(a){
-    
-    
- 
+function processImage(a) {
+
+
+
 
     //declare array
     var img = [];
-        for (var n = 0, cc = 0; n < canvas.width+20; n += 10, cc++) {
-            //add a new row
-            img[cc] = [];
-            for (var m = 0; m < canvas.height+20; m += 10) {
+    for (var n = 0, cc = 0; n < canvas.width + 20; n += 10, cc++) {
+        //add a new row
+        img[cc] = [];
+        for (var m = 0; m < canvas.height + 20; m += 10) {
 
-                //get data of a 10x 10 portion wich will be 1 pixel
-                var iData = ctx.getImageData(m -10 , n -10, 10, 10);
-                var c = 0;
+            //get data of a 10x 10 portion wich will be 1 pixel
+            var iData = ctx.getImageData(m - 10, n - 10, 10, 10);
+            var c = 0;
 
-                //count total of black pixels
-                for (i = 0; i < iData.data.length; i += 4) {
-                    if (iData.data[i + 3] > 0) c++;
-                }
-                
-                // add the pixel proportilan for 255
-                // ex : if there was all black it will be 255
-                // if was no black will be 0
-                //we also add the withe margin
-                if(n==0||n==0 ||m==0||m==0){
-                    img[cc].push(0);
-                }else{
-                    
-                img[cc].push(parseInt(255*(c/100)) );
-                }
+            //count total of black pixels
+            for (i = 0; i < iData.data.length; i += 4) {
+                if (iData.data[i + 3] > 0) c++;
+            }
+
+            // add the pixel proportilan for 255
+            // ex : if there was all black it will be 255
+            // if was no black will be 0
+            //we also add the withe margin
+            if (n == 0 || n == 0 || m == 0 || m == 0) {
+                img[cc].push(0);
+            } else {
+
+                img[cc].push(parseInt(255 * (c / 100)));
             }
         }
+    }
     return img;
 }
