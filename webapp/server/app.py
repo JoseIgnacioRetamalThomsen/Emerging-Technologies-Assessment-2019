@@ -17,6 +17,11 @@ from matplotlib.figure import Figure
 from keras.layers import Dense, Dropout, Flatten
 import concurrent.futures
 import urllib.request
+import base64 as b64
+from PIL import Image 
+from io import BytesIO
+import re
+import pandas as pd
 
 #logging.basicConfig(level=logging.DEBUG)
 
@@ -37,47 +42,65 @@ def process():
    # graph = tf.get_default_graph()
   
 
-    if request.method == "POST": 
+    if request.method == "POST":
+
+        image64 = request.data.decode("utf-8") 
+        data = re.sub('data:image/png;base64,', '',image64)
+        print(data)
+        image = Image.open(BytesIO(b64.b64decode(data))).convert('LA')
+        img = image.resize((20,20))
         
-        #get data from request then convert it into a  28x28 np array
-        print(request.data)
-       # print(np.array([254]).astype("byte"))
-        image = np.array(json.loads(request.data))
+        img.show()
         print(image)
-        c = 0
-        for i in image:
-            image[c] = 255-i
-            c += 1
-        print(image)
-        image = np.array(image)
-        image = image.reshape(1,28,28,1)
-        image = image.astype('float32')
-        image /= 255
-        count =0
+        a = np.asarray(img)
+        n = []
+        for number in a:
+            for j in number:
+                n.append(j[1])
+        n = np.array(n)
+        n = n.reshape(20,20)
+        plt.imshow(n, cmap='gray')
+        plt.show()
+        img.save("test.png")
+        mask = n>0
+        n =a[np.ix_(mask.any(1),mask.any(0))]
+        print(n)
+        #Image.fromarray(a,"RGB").show()
+       # print(image)
+    #     c = 0
+    #     for i in image:
+    #         image[c] = 255-i
+    #         c += 1
+    #     print(image)
+    #     image = np.array(image)
+    #     image = image.reshape(1,28,28,1)
+    #     image = image.astype('float32')
+    #     image /= 255
+    #     count =0
         
       
-        #image = image.reshape(28,28)
-        #finalImg = finalImg.astype('float32')
-      # print(image)
-        finalImg = image
+    #     #image = image.reshape(28,28)
+    #     #finalImg = finalImg.astype('float32')
+    #   # print(image)
+    #     finalImg = image
        
 
-        # reshape image
-        #finalImg  = ~np.array(list(image)).reshape(1, 784).astype(np.uint8) / 255.0
-        #finalImg = np.reshape(1, 784)
+    #     # reshape image
+    #     #finalImg  = ~np.array(list(image)).reshape(1, 784).astype(np.uint8) / 255.0
+    #     #finalImg = np.reshape(1, 784)
 
-        # make prediction
-        result = model.predict(image) 
+    #     # make prediction
+    #     result = model.predict(image) 
   
-        high =0
-        num =0
-        pos = 0
-        for x in result[0]:
-            if x > high:
-                high = x
-                num = pos
-            pos +=1
-        print(num)
+    #     high =0
+    #     num =0
+    #     pos = 0
+    #     for x in result[0]:
+    #         if x > high:
+    #             high = x
+    #             num = pos
+    #         pos +=1
+    #     print(num)
 
         # with concurrent.futures.ThreadPoolExecutor(max_workers=1) as executor:
         #     future = executor.submit(make_prediction,finalImg)

@@ -132,13 +132,13 @@ $(document).ready(function () {
                 img[cc].push(parseInt((255 * (c / 100))));
             }
         }
-
+        var img1= canvas.toDataURL('image/png');
         img = processImage();
         console.log(img);
         $.ajax({
             url: 'http://127.0.0.1:5000/reco',
-            data: JSON.stringify(img),
-            contentType: 'application/json;charset=UTF-8',
+            data: img1,
+            contentType: 'data:image/png;base64',
             type: 'POST',
             success: function (response) {
                 console.log("no error")
