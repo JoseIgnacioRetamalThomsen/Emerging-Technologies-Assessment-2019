@@ -3,8 +3,8 @@ var canvas = document.getElementById("inputCanvas");
 
 //size of the canvas
 var canvasSize = {
-    width: 260,
-    height: 260,
+    width: 800,
+    height: 200,
 
 }
 
@@ -15,7 +15,7 @@ var canvasPosition = {
 }
 
 //radius of the circvle for drawing
-var radius = 15;
+var radius = 5;
 //colour for drawing
 var colour = '#000000';
 
@@ -117,27 +117,12 @@ $(document).ready(function () {
 
 
     $("#processButton").click(function () {
-        /// console.log("Processing");
-        var img = [];
-        for (var n = 0, cc = 0; n < canvas.width; n += 10, cc++) {
-            img[cc] = [];
-            for (var m = 0; m < canvas.height; m += 10) {
-                var iData = ctx.getImageData(m, n, 10, 10);
-                var c = 0;
-
-                for (i = 0; i < iData.data.length; i += 4) {
-                    if (iData.data[i + 3] > 0) c++;
-                }
-                // console.log(c);
-                img[cc].push(parseInt((255 * (c / 100))));
-            }
-        }
-        var img1= canvas.toDataURL('image/png');
-        img = processImage();
-        console.log(img);
+      
+        var img= canvas.toDataURL('image/png');
+      
         $.ajax({
             url: 'http://127.0.0.1:5000/reco',
-            data: img1,
+            data: img,
             contentType: 'data:image/png;base64',
             type: 'POST',
             success: function (response) {
@@ -159,38 +144,3 @@ $(document).ready(function () {
 
 });
 
-function processImage(a) {
-
-
-
-
-    //declare array
-    var img = [];
-    for (var n = 0, cc = 0; n < canvas.width + 20; n += 10, cc++) {
-        //add a new row
-        img[cc] = [];
-        for (var m = 0; m < canvas.height + 20; m += 10) {
-
-            //get data of a 10x 10 portion wich will be 1 pixel
-            var iData = ctx.getImageData(m - 10, n - 10, 10, 10);
-            var c = 0;
-
-            //count total of black pixels
-            for (i = 0; i < iData.data.length; i += 4) {
-                if (iData.data[i + 3] > 0) c++;
-            }
-
-            // add the pixel proportilan for 255
-            // ex : if there was all black it will be 255
-            // if was no black will be 0
-            //we also add the withe margin
-            if (n == 0 || n == 0 || m == 0 || m == 0) {
-                img[cc].push(0);
-            } else {
-
-                img[cc].push(parseInt(255 * (c / 100)));
-            }
-        }
-    }
-    return img;
-}
