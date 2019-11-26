@@ -68,7 +68,7 @@ else:
     print("other")
 
 #print("Before")
-#print(x_train[0])
+
 
 x_train = x_train.astype('float32')
 x_test = x_test.astype('float32')
@@ -82,7 +82,7 @@ print(x_test.shape[0], 'test samples')
 # convert class vectors to binary class matrices
 y_train = kr.utils.to_categorical(y_train, num_classes)
 y_test = kr.utils.to_categorical(y_test, num_classes)
-
+print(x_train[0])
 model = kr.models.Sequential()
 
 # model.add(kr.layers.Conv2D(64,kernel_size=(7, 7),activation='relu',input_shape=(28,28,1)))

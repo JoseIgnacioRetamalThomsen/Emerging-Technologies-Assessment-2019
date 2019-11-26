@@ -127,7 +127,7 @@ def process():
         plt.imshow(n, cmap='gray')
         
         img = Image.fromarray(n)
-        img.show()
+        #img.show()
      
         i,j = n.shape
         ish = i>j
@@ -159,7 +159,7 @@ def process():
                     for j in range (j0,j0+10):
                         if img[i][j]==0:
                             sum +=1
-                f.append((100-sum)/100)
+                f.append(1 -((100-sum)/100))
         
         f = np.array(f)
 
@@ -180,18 +180,18 @@ def process():
                     cx+=1
         cx,cy = int(round(totalx/cx)),int(round(totaly/cy))
 
-        top = np.zeros((14-cy, 20), dtype = np.int)
+        top = np.ones((14-cy, 20), dtype = np.int)
         f = np.concatenate((top, f), axis = 0)
 
-        bot = np.zeros((28-((14-cy)+20), 20), dtype = np.int)
+        bot = np.ones((28-((14-cy)+20), 20), dtype = np.int)
         f = np.concatenate((f, bot), axis = 0)
 
-        left = np.zeros((28, 14-cx), dtype = np.int)
+        left = np.ones((28, 14-cx), dtype = np.int)
         f = np.concatenate((left, f), axis = 1)
-        right = np.zeros((28,28-((14-cx)+20)), dtype = np.int)#(28-((14-cx)+20)
+        right = np.ones((28,28-((14-cx)+20)), dtype = np.int)#(28-((14-cx)+20)
         f = np.concatenate((f, right), axis = 1)
 
-        print(f)
+       # print(f)
         f = f.reshape(1,28,28,1)
         #make prediction
         result = model.predict(f) 
@@ -208,7 +208,7 @@ def process():
             pos +=1
         print(num)
     
-        print(f)
+        #print(f)
         # a = np.asarray(img)
         # n = []
         # for number in a:
