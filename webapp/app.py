@@ -64,65 +64,67 @@ def process():
                 n.append(j[1])
         n = np.array(n)
         n = n.reshape(w,h)
-        x,y = n.shape
+        n = cropImage(n,255)
+      #  x,y = n.shape
 
-        # crop left right
-        count = 0
-        ib = 0
-        for i in range(0,x):
-            for j in range(0,y):
-                if(n[i][j]==255):
-                    ib = 1
-            if ib==1:
-                break
-            count +=1
 
-        if count >0:
-            count -= 1
-        n = np.delete(n, range(0,count), 0)
+        # # crop left right
+        # count = 0
+        # ib = 0
+        # for i in range(0,x):
+        #     for j in range(0,y):
+        #         if(n[i][j]==255):
+        #             ib = 1
+        #     if ib==1:
+        #         break
+        #     count +=1
 
-        x,y = n.shape
-        # crop right-left
-        ib=0
-        count2 =0
-        for i in range(0,y):
-            for j in range(0,x):
-                if(n[j][i]==255):
-                    ib=1
-            if ib==1:
-                break
-            count2+=1
+        # if count >0:
+        #     count -= 1
+        # n = np.delete(n, range(0,count), 0)
+
+        # x,y = n.shape
+        # # crop right-left
+        # ib=0
+        # count2 =0
+        # for i in range(0,y):
+        #     for j in range(0,x):
+        #         if(n[j][i]==255):
+        #             ib=1
+        #     if ib==1:
+        #         break
+        #     count2+=1
         
-        n = np.delete(n, range(0,count2), 1)
+        # n = np.delete(n, range(0,count2), 1)
 
-        #crot top-bot
-        x,y = n.shape
+        # #crot top-bot
+        # x,y = n.shape
 
-        ib=0
-        count3 =0
-        for i in range(x-1,0,-1):
-            for j in range(y-1,0,-1):
-                if(n[i][j]==255):
-                    ib=1
-            if ib==1:
-                break
-            count3+=1
+        # ib=0
+        # count3 =0
+        # for i in range(x-1,0,-1):
+        #     for j in range(y-1,0,-1):
+        #         if(n[i][j]==255):
+        #             ib=1
+        #     if ib==1:
+        #         break
+        #     count3+=1
 
-        n = np.delete(n, range(x-count3,x), 0)
+        # n = np.delete(n, range(x-count3,x), 0)
 
-        # crop bot-top
-        x,y = n.shape
-        ib=0
-        count4 =0
-        for i in range(y-1,0,-1):
-            for j in range(x-1,0,-1):
-                if(n[j][i]==255):
-                    ib=1
-            if ib==1:
-                break
-            count4+=1
+        # # crop bot-top
+        # x,y = n.shape
+        # ib=0
+        # count4 =0
+        # for i in range(y-1,0,-1):
+        #     for j in range(x-1,0,-1):
+        #         if(n[j][i]==255):
+        #             ib=1
+        #     if ib==1:
+        #         break
+        #     count4+=1
         
-        n = np.delete(n, range(y-count4,y), 1)
+        # n = np.delete(n, range(y-count4,y), 1)
 
         plt.imshow(n, cmap='gray')
         
