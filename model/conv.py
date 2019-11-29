@@ -31,7 +31,7 @@ class CustomModelCheckpoint(kr.callbacks.Callback):
         print(score[1])
         if score[1] > self.minimun: # your custom condition
     
-            self.model.save('model11.h5', overwrite=True)
+            self.model.save('model7.h5', overwrite=True)
            
             print("saved")
             

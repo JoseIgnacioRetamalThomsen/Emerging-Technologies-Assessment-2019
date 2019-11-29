@@ -5,6 +5,7 @@ from io import BytesIO
 import base64 as b64
 
 
+
 def cropImage(image, limit):
     # crop top-bot
     x, y = image.shape
