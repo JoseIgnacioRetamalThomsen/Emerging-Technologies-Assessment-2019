@@ -13,8 +13,8 @@ import matplotlib.pyplot as plt
 import sys
 import logging
 from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
-from matplotlib.figure import Figure
-from keras.layers import Dense, Dropout, Flatten
+#from matplotlib.figure import Figure
+#from keras.layers import Dense, Dropout, Flatten
 import concurrent.futures
 import urllib.request
 import base64 as b64
@@ -22,7 +22,8 @@ from PIL import Image
 from io import BytesIO
 import re
 import pandas as pd
-import imagearray
+import imagearray 
+from collections import deque
 
 # logging.basicConfig(level=logging.DEBUG)
 
@@ -34,7 +35,7 @@ CORS(app)
 tf.keras.backend.set_learning_phase(0)  # Ignore dropout at inference
 model = load_model('../models/model73.h5')
 
-img_queue = []
+img_queue = deque([])
 
 # Add index route
 @app.route('/')
@@ -42,20 +43,60 @@ def home():
     return app.send_static_file('index.html')
 
 
-@app.route("/newimg", methods=["POST"])
+@app.route("/imgs", methods=["POST", "GET"])
 def add_img():
+
     if request.method == "POST":
         # get data from request
         image64 = request.data.decode("utf-8")
+        
         # remove header
         data = re.sub('data:image/png;base64,', '', image64)
+        print(data)
         # open image as grayscale
         img = Image.open(BytesIO(b64.b64decode(data))).convert('LA')
         img_queue.append(img)
         print(len(img_queue))
 
         return "added"
-        
+    if request.method == "GET":
+        print("Hello")
+        #first image
+        rs = imagearray.divedeQueue(img_queue)
+        print(len(rs))
+
+        while True:
+            if(len(rs)==0):
+                 break
+            img = rs.popleft()
+            img,x1,x2,x4,x4 = imagearray.cropImage(img,255)
+            img = imagearray.simulateMnist(img)
+            print(img.shape)
+            #plt.imshow(img, cmap='gray')
+            #plt.savefig("img.png")
+            img = img.reshape(1,28,28,1)
+            result = model.predict(img)
+            print(result)
+            high = 0
+            num = 0
+            pos = 0
+            for x in result[0]:
+                if x > high:
+                    high = x
+                    num = pos
+                pos += 1
+            print(num)
+        return "7"
+
+
+@app.route("/clear", methods=["POST"])
+def clear_img():
+    if request.method == "POST":
+        clearImages()
+        print(len(img_queue))
+        return "true"
+
+
 @app.route("/reco", methods=["GET", "POST"])
 def process():
 
@@ -84,7 +125,7 @@ def process():
         n = np.array(n).reshape(w, h)
         n, r, l, t, b = imagearray.cropImage(n, 255)
 
-        plt.imshow(n, cmap='gray')
+       # plt.imshow(n, cmap='gray')
 
         # scale image to width or height
         img = Image.fromarray(n)
@@ -112,7 +153,7 @@ def process():
             img = np.concatenate((p, img), axis=0)
             img = np.concatenate((img, p), axis=0)
 
-        # scale to 20x20 simulating 
+        # scale to 20x20 simulating
         f = []
         sum = 0
         for i0 in range(0, w, 10):
@@ -122,17 +163,17 @@ def process():
                     for j in range(j0, j0+10):
                         if img[i][j] == 0:
                             sum += 1
-                if sum == 0: sum = 0.01  # we don't want 0 because Mnist has not 0
-                f.append((sum)/100)
+                if sum == 0:
+                    sum = 0.01  # we don't want 0 because Mnist has not 0
+                f.append((sum/100.0))#.astype('float32')
 
+        f = np.array(f).reshape(int(w/10), int(h/10))
 
-        f=np.array(f).reshape(int(w/10), int(h/10))
-
-        print(f.shape)
+        #print(f.shape)
         # calculate pixel center of mass
-        ii, jj=f.shape
-        totaly, totalx=0, 0
-        cy, cx=0, 0
+        ii, jj = f.shape
+        totaly, totalx = 0, 0
+        cy, cx = 0, 0
         for i in range(0, ii):
             for j in range(0, jj):
                 if f[i][j] != 0:
@@ -141,35 +182,34 @@ def process():
                 if f[i][j] != 0:
                     totalx += (j)
                     cx += 1
-        cx, cy=int(round(totalx/cx)), int(round(totaly/cy))
+        cx, cy = int(round(totalx/cx)), int(round(totaly/cy))
 
-        
-        top=np.ones((14-cy, 20), dtype = np.int)
-        f=np.concatenate((top, f), axis = 0)
+        top = np.ones((14-cy, 20), dtype=np.int)
+        f = np.concatenate((top, f), axis=0)
 
-        bot=np.ones((28-((14-cy)+20), 20), dtype = np.int)
-        f=np.concatenate((f, bot), axis = 0)
+        bot = np.ones((28-((14-cy)+20), 20), dtype=np.int)
+        f = np.concatenate((f, bot), axis=0)
 
-        left=np.ones((28, 14-cx), dtype = np.int)
-        f=np.concatenate((left, f), axis = 1)
-        right=np.ones((28, 28-((14-cx)+20)),
-                        dtype = np.int)  # (28-((14-cx)+20)
-        f=np.concatenate((f, right), axis = 1)
+        left = np.ones((28, 14-cx), dtype=np.int)
+        f = np.concatenate((left, f), axis=1)
+        right = np.ones((28, 28-((14-cx)+20)),
+                        dtype=np.int)  # (28-((14-cx)+20)
+        f = np.concatenate((f, right), axis=1)
 
        # print(f)
-        f=f.reshape(1, 28, 28, 1)
+        f = f.reshape(1, 28, 28, 1)
         # make prediction
-        result=model.predict(f)
+        result = model.predict(f)
 
         print(result)
 
-        high=0
-        num=0
-        pos=0
+        high = 0
+        num = 0
+        pos = 0
         for x in result[0]:
             if x > high:
-                high=x
-                num=pos
+                high = x
+                num = pos
             pos += 1
         print(num)
 
@@ -177,10 +217,14 @@ def process():
 
 
 def make_prediction(img):
-    model=load_model('../models/cnn.h5')
-    result=model.predict(img)
+    model = load_model('../models/cnn.h5')
+    result = model.predict(img)
     return result
 
 
+def clearImages():
+    img_queue.clear()
+
+
 if __name__ == '__main__':
-    app.run(debug = True)
+    app.run(debug=True)

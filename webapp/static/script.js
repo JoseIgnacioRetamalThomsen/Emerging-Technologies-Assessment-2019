@@ -23,6 +23,8 @@ var colour = '#000000';
 canvas.width = canvasSize.width;
 canvas.height = canvasSize.height;
 
+//add on mouse over
+canvas.mouseIsOver = false;
 
 
 // Get a 2D context for the canvas.
@@ -48,7 +50,8 @@ ctx.drawCircle = function (x, y, r, color) {
 
 //start drawing
 //is mouse is down we start drawing
-$(document).on('mousedown touchstart', function (e) {
+$(canvas).on('mousedown touchstart', function (e) {
+   // $(document).on('mousedown touchstart', function (e) {
 
 
 
@@ -64,7 +67,7 @@ $(document).on('mousedown touchstart', function (e) {
 });
 
 //draw
-$(document).on('mousemove touchmove', function (e) {
+$(canvas).on('mousemove touchmove', function (e) {
 
 
     canvasPosition.x = canvas.offsetLeft;
@@ -103,12 +106,12 @@ $(document).on('mousemove touchmove', function (e) {
 
 
 //end drawing
-$(document).on('mouseup touchend', function (e) {
+$(canvas).on('mouseup touchend', function (e) {
     canvas.isDrawing = false;
-    
-    var img= canvas.toDataURL('image/png');
+      
+    var img = canvas.toDataURL('image/png');
     $.ajax({
-        url: 'http://127.0.0.1:5000/newimg',
+        url: 'http://127.0.0.1:5000/imgs',
         data: img,
         contentType: 'data:image/png;base64',
         type: 'POST',
@@ -128,20 +131,12 @@ $(document).on('mouseup touchend', function (e) {
 //Clear canvas when button is tabed.
 $(document).ready(function () {
     $("#clearButton").click(function () {
-        console.log("Clear");
+
         ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-    });
-
-
-    $("#processButton").click(function () {
-      
-        var img= canvas.toDataURL('image/png');
-      
         $.ajax({
-            url: 'http://127.0.0.1:5000/reco',
-            data: img,
-            contentType: 'data:image/png;base64',
+            url: 'http://127.0.0.1:5000/clear',
+
             type: 'POST',
             success: function (response) {
                 console.log("no error")
@@ -153,7 +148,45 @@ $(document).ready(function () {
             }
 
         });
+
     });
+
+
+    $("#processButton").click(function () {
+
+        
+
+        $.ajax({
+            url: 'http://127.0.0.1:5000/imgs',
+         
+            type: 'GET',
+            success: function (response) {
+                console.log("no error")
+                console.log(response);
+            },
+            error: function (error) {
+                console.log("error")
+                console.log(error);
+            }
+
+        });
+
+    //     $.ajax({
+    //         url: 'http://127.0.0.1:5000/reco',
+    //         data: img,
+    //         contentType: 'data:image/png;base64',
+    //         type: 'POST',
+    //         success: function (response) {
+    //             console.log("no error")
+    //             console.log(response);
+    //         },
+    //         error: function (error) {
+    //             console.log("error")
+    //             console.log(error);
+    //         }
+
+    //     });
+ });
 
     $('#formControlRange').on('input change', function (e) {
         console.log($(this).val());
