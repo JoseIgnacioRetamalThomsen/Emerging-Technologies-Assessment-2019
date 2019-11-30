@@ -155,6 +155,7 @@ $(document).ready(function () {
     $("#processButton").click(function () {
 
         
+        $('#spi').removeClass('invisible');
 
         $.ajax({
             url: 'http://127.0.0.1:5000/imgs',
@@ -163,6 +164,10 @@ $(document).ready(function () {
             success: function (response) {
                 console.log("no error")
                 console.log(response);
+                $('#spi').addClass('invisible');
+                $('#prediction').removeClass('invisible');
+                $('#prediction').html(response);
+
             },
             error: function (error) {
                 console.log("error")

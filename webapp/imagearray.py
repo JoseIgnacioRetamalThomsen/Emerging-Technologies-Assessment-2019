@@ -156,7 +156,7 @@ def divedeQueue(iq):
         img_r = converTo1D(img_r, hr, wr)
 
         isNew = np.array_equal(img_l, rs[len(rs)-1])
-        print(isNew)
+     
         if isNew == False:
             rs.pop()
             rs.append(img_l)
@@ -247,10 +247,7 @@ def simulateMnist(img):
                     dtype=np.int)  # (28-((14-cx)+20)
     f = np.concatenate((f, right), axis=1)
 
-    # print(f)
-    #f = f.reshape(1, 28, 28, 1)
-   # plt.imshow(f, cmap='gray')
-    #plt.show()
+   
     return f
 
 

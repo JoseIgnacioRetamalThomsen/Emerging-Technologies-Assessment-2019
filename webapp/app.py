@@ -7,9 +7,9 @@ import json
 from flask_cors import CORS
 # xxxxxxxxxxxxxxx
 import tensorflow as tf
-import gzip
-import sklearn.preprocessing as pre
-import matplotlib.pyplot as plt
+
+#import sklearn.preprocessing as pre
+#import matplotlib.pyplot as plt
 import sys
 import logging
 from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
@@ -21,11 +21,11 @@ import base64 as b64
 from PIL import Image
 from io import BytesIO
 import re
-import pandas as pd
+#import pandas as pd
 import imagearray 
 from collections import deque
 
-# logging.basicConfig(level=logging.DEBUG)
+# 
 
 app = fl.Flask(__name__)
 CORS(app)
@@ -46,54 +46,49 @@ def home():
 @app.route("/imgs", methods=["POST", "GET"])
 def add_img():
 
+    # add images to queue
     if request.method == "POST":
         # get data from request
         image64 = request.data.decode("utf-8")
-        
         # remove header
         data = re.sub('data:image/png;base64,', '', image64)
-        print(data)
         # open image as grayscale
         img = Image.open(BytesIO(b64.b64decode(data))).convert('LA')
+        # add image to queue
         img_queue.append(img)
-        print(len(img_queue))
+        return "OK"
 
-        return "added"
     if request.method == "GET":
-        print("Hello")
+       
         #first image
         rs = imagearray.divedeQueue(img_queue)
-        print(len(rs))
-
+      
+        numb =""
         while True:
             if(len(rs)==0):
                  break
             img = rs.popleft()
             img,x1,x2,x4,x4 = imagearray.cropImage(img,255)
             img = imagearray.simulateMnist(img)
-            print(img.shape)
+          
             #plt.imshow(img, cmap='gray')
             #plt.savefig("img.png")
             img = img.reshape(1,28,28,1)
             result = model.predict(img)
-            print(result)
-            high = 0
-            num = 0
-            pos = 0
-            for x in result[0]:
-                if x > high:
-                    high = x
-                    num = pos
-                pos += 1
-            print(num)
-        return "7"
+         
+       
+            num = np.argmax(result, axis=-1)[0]
+       
+            numb+= str(num)
+     
+        return numb
 
 
 @app.route("/clear", methods=["POST"])
 def clear_img():
     if request.method == "POST":
         clearImages()
-        print(len(img_queue))
+      
         return "true"
 
 
@@ -109,7 +104,7 @@ def process():
         # open image as grayscale
         img = Image.open(BytesIO(b64.b64decode(data))).convert('LA')
         img_queue.append(img)
-        print(len(img_queue))
+   
         # original size
         w, h = 200, 800
 
@@ -169,7 +164,7 @@ def process():
 
         f = np.array(f).reshape(int(w/10), int(h/10))
 
-        #print(f.shape)
+      
         # calculate pixel center of mass
         ii, jj = f.shape
         totaly, totalx = 0, 0
@@ -196,12 +191,12 @@ def process():
                         dtype=np.int)  # (28-((14-cx)+20)
         f = np.concatenate((f, right), axis=1)
 
-       # print(f)
+       
         f = f.reshape(1, 28, 28, 1)
         # make prediction
         result = model.predict(f)
 
-        print(result)
+       
 
         high = 0
         num = 0
@@ -211,7 +206,7 @@ def process():
                 high = x
                 num = pos
             pos += 1
-        print(num)
+        
 
     return str(num)
 
