@@ -5,24 +5,17 @@ from keras.models import load_model
 import numpy as np
 import json
 from flask_cors import CORS
-# xxxxxxxxxxxxxxx
 import tensorflow as tf
-
-#import sklearn.preprocessing as pre
-#import matplotlib.pyplot as plt
 import sys
 import logging
 from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
-#from matplotlib.figure import Figure
-#from keras.layers import Dense, Dropout, Flatten
 import concurrent.futures
 import urllib.request
 import base64 as b64
 from PIL import Image
 from io import BytesIO
 import re
-#import pandas as pd
-import imagearray 
+import imagehelper as ih 
 from collections import deque
 
 # 
@@ -61,24 +54,17 @@ def add_img():
     if request.method == "GET":
        
         #first image
-        rs = imagearray.divedeQueue(img_queue)
-      
+        rs = ih.divedeQueue(img_queue)
         numb =""
         while True:
             if(len(rs)==0):
                  break
             img = rs.popleft()
-            img,x1,x2,x4,x4 = imagearray.cropImage(img,255)
-            img = imagearray.simulateMnist(img)
-          
-            #plt.imshow(img, cmap='gray')
-            #plt.savefig("img.png")
+            img,x1,x2,x4,x4 = ih.cropImage(img,255)
+            img = ih.simulateMnist(img)
             img = img.reshape(1,28,28,1)
             result = model.predict(img)
-         
-       
             num = np.argmax(result, axis=-1)[0]
-       
             numb+= str(num)
      
         return numb
@@ -90,126 +76,6 @@ def clear_img():
         clearImages()
       
         return "true"
-
-
-@app.route("/reco", methods=["GET", "POST"])
-def process():
-
-    if request.method == "POST":
-
-        # get data from request
-        image64 = request.data.decode("utf-8")
-        # remove header
-        data = re.sub('data:image/png;base64,', '', image64)
-        # open image as grayscale
-        img = Image.open(BytesIO(b64.b64decode(data))).convert('LA')
-        img_queue.append(img)
-   
-        # original size
-        w, h = 200, 800
-
-        # convert to array with 1 int
-        # doing just Image.open(BytesIO(b64.b64decode(data))).convert('L') don't work becuase image has a transparent chanel
-        # https://stackoverflow.com/questions/44997339/convert-python-image-to-single-channel-from-rgb-using-pil-or-scipy
-        a = np.asarray(img)
-        n = []
-        for number in a:
-            for j in number:
-                n.append(j[1])
-        # convert to 2d np array
-        n = np.array(n).reshape(w, h)
-        n, r, l, t, b = imagearray.cropImage(n, 255)
-
-       # plt.imshow(n, cmap='gray')
-
-        # scale image to width or height
-        img = Image.fromarray(n)
-
-        i, j = n.shape
-        ish = i > j  # scale horizontal if true
-        w, h = 200, 200
-        # want to keep scale at 10 multiplied
-        if ish:
-            img = img.resize(((int(round((int(round(w/10))/i)*j))*10), h))
-        else:
-            img = img.resize((w, (int(round((int(round(h/10))/j)*i))*10)))
-        img = np.asarray(img)
-
-        # fill for 200x200 image
-        x, y = img.shape
-        if ish:
-            res = w-y
-            p = np.zeros((h, int(res/2)), dtype=np.int)
-            img = np.concatenate((p, img), axis=1)
-            img = np.concatenate((img, p), axis=1)
-        else:
-            res = h-x
-            p = np.zeros((int(res/2), w), dtype=np.int)
-            img = np.concatenate((p, img), axis=0)
-            img = np.concatenate((img, p), axis=0)
-
-        # scale to 20x20 simulating
-        f = []
-        sum = 0
-        for i0 in range(0, w, 10):
-            for j0 in range(0, h, 10):
-                sum = 0
-                for i in range(i0, i0+10):
-                    for j in range(j0, j0+10):
-                        if img[i][j] == 0:
-                            sum += 1
-                if sum == 0:
-                    sum = 0.01  # we don't want 0 because Mnist has not 0
-                f.append((sum/100.0))#.astype('float32')
-
-        f = np.array(f).reshape(int(w/10), int(h/10))
-
-      
-        # calculate pixel center of mass
-        ii, jj = f.shape
-        totaly, totalx = 0, 0
-        cy, cx = 0, 0
-        for i in range(0, ii):
-            for j in range(0, jj):
-                if f[i][j] != 0:
-                    totaly += (i)
-                    cy += 1
-                if f[i][j] != 0:
-                    totalx += (j)
-                    cx += 1
-        cx, cy = int(round(totalx/cx)), int(round(totaly/cy))
-
-        top = np.ones((14-cy, 20), dtype=np.int)
-        f = np.concatenate((top, f), axis=0)
-
-        bot = np.ones((28-((14-cy)+20), 20), dtype=np.int)
-        f = np.concatenate((f, bot), axis=0)
-
-        left = np.ones((28, 14-cx), dtype=np.int)
-        f = np.concatenate((left, f), axis=1)
-        right = np.ones((28, 28-((14-cx)+20)),
-                        dtype=np.int)  # (28-((14-cx)+20)
-        f = np.concatenate((f, right), axis=1)
-
-       
-        f = f.reshape(1, 28, 28, 1)
-        # make prediction
-        result = model.predict(f)
-
-       
-
-        high = 0
-        num = 0
-        pos = 0
-        for x in result[0]:
-            if x > high:
-                high = x
-                num = pos
-            pos += 1
-        
-
-    return str(num)
-
 
 def make_prediction(img):
     model = load_model('../models/cnn.h5')
