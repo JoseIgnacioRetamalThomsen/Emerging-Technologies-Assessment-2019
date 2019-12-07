@@ -5,7 +5,6 @@ var canvas = document.getElementById("inputCanvas");
 var canvasSize = {
     width: 800,
     height: 200,
-
 }
 
 //position of canvas for calulate offset
@@ -13,7 +12,6 @@ var canvasPosition = {
     x: canvas.offsetLeft,
     y: canvas.offsetTop
 }
-
 //radius of the circvle for drawing
 var radius = 5;
 //colour for drawing
@@ -45,98 +43,64 @@ ctx.drawCircle = function (x, y, r, color) {
     this.moveTo(x, y);
     this.arc(x, y, r, 0, Math.PI * 2, false);
     this.fill();
-
 };
 
-//start drawing
-//is mouse is down we start drawing
-$(canvas).on('mousedown touchstart', function (e) {
-   // $(document).on('mousedown touchstart', function (e) {
-
-
-
-    canvas.isDrawing = true;
-
-    //get mouase position relative to canvas
-    lastX = e.pageX - canvasPosition.x;
-    lastY = e.pageY - canvasPosition.y;
-
-    //Draw first circle
-    ctx.drawCircle(lastX, lastY, radius, colour);
-
-});
-
-//draw
-$(canvas).on('mousemove touchmove', function (e) {
-
-
-    canvasPosition.x = canvas.offsetLeft;
-
-    canvasPosition.y = canvas.offsetTop;
-
-    //only draw after mouse is down
-    if (!canvas.isDrawing) {
-        return;
-    }
-
-    //get actual x and y position of mouse or touch
-    x = e.pageX - canvasPosition.x;
-    y = e.pageY - canvasPosition.y;
-
-    //   var fillColor = colour;
-    ctx.drawCircle(x, y, radius, colour);
-
-    //distance beetwen this and last draw
-    var distance = Math.sqrt(Math.pow((lastX - x), 2) + Math.pow(lastY - y, 2));
-
-    // if the distance is bigger than the radius we will draw circles between the 2 points.
-    if (distance > canvas.space) {
-        ctx.beginPath();
-        ctx.moveTo(lastX, lastY);
-        ctx.lineWidth = radius * 2;
-        ctx.lineTo(x, y);
-
-        ctx.stroke();
-    }
-
-    // save position for next iteration      
-    lastX = x;
-    lastY = y;
-});
-
-
-//end drawing
-$(canvas).on('mouseup touchend', function (e) {
-    canvas.isDrawing = false;
-      
-    var img = canvas.toDataURL('image/png');
-    $.ajax({
-        url: 'http://127.0.0.1:5000/imgs',
-        data: img,
-        contentType: 'data:image/png;base64',
-        type: 'POST',
-        success: function (response) {
-            console.log("no error")
-            console.log(response);
-        },
-        error: function (error) {
-            console.log("error")
-            console.log(error);
-        }
-
+$(document).ready(function () {
+    //start drawing
+    //is mouse is down we start drawing
+    $(canvas).on('mousedown touchstart', function (e) {
+        canvas.isDrawing = true;
+        //get mouase position relative to canvas
+        lastX = e.pageX - canvasPosition.x;
+        lastY = e.pageY - canvasPosition.y;
+        //Draw first circle
+        ctx.drawCircle(lastX, lastY, radius, colour);
     });
 
-});
+    //draw
+    $(canvas).on('mousemove touchmove', function (e) {
 
-//Clear canvas when button is tabed.
-$(document).ready(function () {
-    $("#clearButton").click(function () {
+        canvasPosition.x = canvas.offsetLeft;
+        canvasPosition.y = canvas.offsetTop;
+        //only draw after mouse is down
+        if (!canvas.isDrawing) {
+            return;
+        }
+        //get actual x and y position of mouse or touch
+        x = e.pageX - canvasPosition.x;
+        y = e.pageY - canvasPosition.y;
 
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        //   var fillColor = colour;
+        ctx.drawCircle(x, y, radius, colour);
 
+        //distance beetwen this and last draw
+        var distance = Math.sqrt(Math.pow((lastX - x), 2) + Math.pow(lastY - y, 2));
+
+        // if the distance is bigger than the radius we will draw circles between the 2 points.
+        if (distance > canvas.space) {
+            ctx.beginPath();
+            ctx.moveTo(lastX, lastY);
+            ctx.lineWidth = radius * 2;
+            ctx.lineTo(x, y);
+
+            ctx.stroke();
+        }
+
+        // save position for next iteration      
+        lastX = x;
+        lastY = y;
+    });
+
+    //end drawing
+    $(canvas).on('mouseup touchend', function (e) {
+        canvas.isDrawing = false;
+
+        // we send image after each up or touch end
+        var img = canvas.toDataURL('image/png');
         $.ajax({
-            url: 'http://127.0.0.1:5000/clear',
-
+            url: 'http://127.0.0.1:5000/imgs',
+            data: img,
+            contentType: 'data:image/png;base64',
             type: 'POST',
             success: function (response) {
                 console.log("no error")
@@ -146,52 +110,43 @@ $(document).ready(function () {
                 console.log("error")
                 console.log(error);
             }
-
         });
-
     });
 
-
-    $("#processButton").click(function () {
-
-        
-        $('#spi').removeClass('invisible');
-
+    //Clear canvas when button is tabed.
+    $("#clearButton").click(function () {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
         $.ajax({
-            url: 'http://127.0.0.1:5000/imgs',
-         
-            type: 'GET',
+            url: 'http://127.0.0.1:5000/clear',
+            type: 'POST',
             success: function (response) {
                 console.log("no error")
                 console.log(response);
-                $('#spi').addClass('invisible');
-                $('#prediction').removeClass('invisible');
-                $('#prediction').html(response);
-
             },
             error: function (error) {
                 console.log("error")
                 console.log(error);
             }
-
         });
+    });
 
-    //     $.ajax({
-    //         url: 'http://127.0.0.1:5000/reco',
-    //         data: img,
-    //         contentType: 'data:image/png;base64',
-    //         type: 'POST',
-    //         success: function (response) {
-    //             console.log("no error")
-    //             console.log(response);
-    //         },
-    //         error: function (error) {
-    //             console.log("error")
-    //             console.log(error);
-    //         }
-
-    //     });
- });
+    $("#processButton").click(function () {
+        $('#spi').removeClass('invisible');
+        $.ajax({
+            url: 'http://127.0.0.1:5000/imgs',
+            type: 'GET',
+            success: function (response) {
+                                // make spiner not visible and result visible
+                $('#spi').addClass('invisible');
+                $('#prediction').removeClass('invisible');
+                // show prediction
+                $('#prediction').html(response);
+            },
+            error: function (error) {
+                            console.log(error);
+            }
+        });
+    });
 
     $('#formControlRange').on('input change', function (e) {
         console.log($(this).val());

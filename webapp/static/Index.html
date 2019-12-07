@@ -1,7 +1,6 @@
 <!-- Modified from : https://getbootstrap.com/docs/4.3/getting-started/introduction/ -->
 <!doctype html>
 <html lang="en">
-
 <head>
     <!-- Required meta tags -->
     <meta charset="utf-8">
@@ -17,17 +16,17 @@
 
 <body>
     <div class="container">
-
         <div class="jumbotron">
+             <!-- Header -->
             <h1 class="display-4">Handwritten Digit Recognition</h1>
             <p class="lead">This is a simple hero unit, a simple jumbotron-style component for calling extra attention
                 to featured content or information.</p>
             <hr class="my-4">
+             <!-- Canvas -->
             <div class="text-center">
                 <canvas id="inputCanvas" style="border: 1px solid black;background-color: white;"></canvas>
             </div>
-
-
+             <!-- Brush wide selector -->
             <form>
                 <div class="form-group">
                     <p>
@@ -36,12 +35,14 @@
                     </p>
                 </div>
             </form>
+             <!-- Clear and Process buttons -->
             <div class="text-center">
                 <p>
                     <button type="button" class="btn btn-danger" id="clearButton">Clear</button>
                     <button type="button" class="btn btn-primary" id="processButton">Predict</button>
                 </p>
             </div>
+             <!-- Spinner -->
             <p>
                 <div class="text-center">
                     <div class="spinner-border invisible" role="status" id="spi">
@@ -49,10 +50,11 @@
                     </div>
                 </div>
             </p>
+             <!-- Shows Prediction -->
             <p>
                 <div class="text-center">
                     <h2 class="invisible" id="prediction">
-                        my prediction
+                        Write a number and then Tab predict
                     </h2>
                 </div>
             </p>
@@ -62,20 +64,7 @@
                 container.</p>
         </div>
     </div>
-    </div>
-
-
-
-    </div>
-
-
-
-
-    </div>
-
-
-    </head>
-
+        </head>
     <body>
         <!-- Optional JavaScript -->
         <!-- jQuery first, then Popper.js, then Bootstrap JS -->
@@ -86,6 +75,7 @@
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
             integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
             crossorigin="anonymous"></script>
+        <!-- Local script -->
         <script src="/static/script.js"></script>
     </body>
 
