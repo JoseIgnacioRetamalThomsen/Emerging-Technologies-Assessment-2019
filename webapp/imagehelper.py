@@ -145,59 +145,58 @@ def divedeQueue(iq):
     : param iq :  queue containing the sequence of images. 
     : return :  queue containig each separate number as 2d array.
     """
-    rs = deque([])
-    img = iq.popleft()
+    rs = deque([]) #queue for put indidual number images(results)
+    
+    img_x_limit = 0 # 
+    img_x_limit_last = 0 
+    rn = 0
+    is_first_img = True
+    count = 0
+
+    ## process first image outside loop
+    img = iq.popleft() 
     w, h = img.size
     img = converTo1D(img, h, w)
     img_r, r = cropRL(img, 255)
     rs.append(img_r)
-    start = 0
-    rn = 0
-    isFirst = True
-
-    count = 0
-    oldstart = 0
-    start = w-r
-    remain = None
+        
+    img_x_Limit = w-r
+    remain = None # overlap
     remain2 = None
     img_n = None
 
     while len(iq) is not 0:
-
-        img = iq.popleft()
-        # iq.append(img)
-        w, h = img.size
-
-        img_l = img.crop((oldstart, 0, start, h))
-
-        img_r = img.crop((start, 0, w, h))
+        img = iq.popleft() #get image from queue
+        w, h = img.size # get actual img size 
+        # get right and left side of img limited by img_x_limit
+        img_l = img.crop((img_x_limit_last, 0, img_x_Limit, h)) 
+        img_r = img.crop((img_x_Limit, 0, w, h))
+        # get both img sizes
         wr, hr = img_r.size
         wl, hl = img_l.size
-        img_l = converTo1D(img_l, hl, wl)
+        img_l = converTo1D(img_l, hl, wl)# convter into 1d np array
+        # check if there is overlap and remove it if there is
         if remain2 is not None:
             h2, w2 = remain2.shape
             img_l = img_l - np.delete(remain2, range(wl, w2), 1)
             remain2 = None
-        img_r = converTo1D(img_r, hr, wr)
-
+        img_r = converTo1D(img_r, hr, wr)# convert into 1D array
+        #check if there is a new number or anothe line of the old
         isNew = np.array_equal(img_l, rs[len(rs)-1])
-     
-        if isNew == False:
+        if isNew == False: # if is not new number remplace last
             rs.pop()
             rs.append(img_l)
             remain = img_r
-        else:
+        else: # if is new number we add to result queue
             if remain is not None:
                 img_r = img_r - remain
                 remain2 = remain
                 remain = None
             img_n, r = cropRL(img_r, 255)
-            oldstart = start
-            start = start + wr - r
+            img_x_limit_last = img_x_Limit
+            img_x_Limit = img_x_Limit + wr - r
             rs.append(img_n)
-   
-        isFirst = False
-
+        is_first_img = False# for check when is firt img in
     return rs
 
 
@@ -265,14 +264,19 @@ def simulateMnist(img):
                 cx += 1
     cx, cy = int(round(totalx/cx)), int(round(totaly/cy))
 
+    # fill image top
     top = np.ones((14-cy, 20), dtype=np.int)
     f = np.concatenate((top, f), axis=0)
 
+    # fill bot
     bot = np.ones((28-((14-cy)+20), 20), dtype=np.int)
     f = np.concatenate((f, bot), axis=0)
 
+    # fill left
     left = np.ones((28, 14-cx), dtype=np.int)
     f = np.concatenate((left, f), axis=1)
+    
+    # fill right
     right = np.ones((28, 28-((14-cx)+20)),
                     dtype=np.int)  # (28-((14-cx)+20)
     f = np.concatenate((f, right), axis=1)

@@ -15,7 +15,7 @@
 </head>
 
 <body>
-    <div class="container">
+    <div class="container-fluid">
         <div class="jumbotron">
              <!-- Header -->
             <h1 class="display-4">Handwritten Digit Recognition</h1>
@@ -24,7 +24,8 @@
             <hr class="my-4">
              <!-- Canvas -->
             <div class="text-center">
-                <canvas id="inputCanvas" style="border: 1px solid black;background-color: white;"></canvas>
+         
+                <div id="canvas_box" class="canvas_container"></div>
             </div>
              <!-- Brush wide selector -->
             <form>
@@ -77,6 +78,7 @@
             crossorigin="anonymous"></script>
         <!-- Local script -->
         <script src="/static/script.js"></script>
+        
     </body>
 
 </html>
