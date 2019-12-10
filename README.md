@@ -61,6 +61,7 @@ pip install -U flask-cors
 
 ### How tO run
 
+flask run --host=0.0.0.0 --port=80
 ### Contact
 
 

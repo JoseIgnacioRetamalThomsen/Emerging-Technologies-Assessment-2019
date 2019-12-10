@@ -18,6 +18,7 @@ import re
 import imagehelper as ih
 from collections import deque
 
+#flask run --host=0.0.0.0 --port=80
 
 app = fl.Flask(__name__)
 CORS(app)
@@ -28,7 +29,7 @@ if __name__ == '__main__':
 # import the model
 tf.keras.backend.set_learning_phase(0)  # Ignore dropout at interface
 # model = load_model('../model/model7.h5')
-model = load_model('../model/static/model7.h5')
+model = load_model('../model/static/model.h5')
 model.summary()
 
 # images queue

@@ -1,5 +1,5 @@
-//var baseUrl = 'http://192.168.43.57:5000/'
-var baseUrl = 'http://127.0.0.1:5000/'
+var baseUrl = 'http://192.168.43.57:5000/'
+//var baseUrl = 'http://127.0.0.1:5000/'
 var radius = 5;
 var colour = '#000000';
 var background = 'white'
@@ -35,7 +35,9 @@ var canvasPosition = {
     y: canvas.offsetTop
 }
 
-//Draw circle on the position x,y with radio r and color.
+/**
+ *  Draw circle on the position x,y with radio r and color.
+ */
 ctx.drawCircle = function (x, y, r, color) {
 
     this.fillStyle = color;
@@ -45,62 +47,24 @@ ctx.drawCircle = function (x, y, r, color) {
     this.fill();
 };
 
-function sendImage(){
-    // we send image after each up or touch end
-    var img = canvas.toDataURL('image/png');
-    
-    quque.push(img)
-
-    var url = baseUrl + 'imgs';
-    var data1 = JSON.stringify(imgs);
-    $.ajax({
-        url: url,
-        data: data1,
-        contentType: 'application/json; charset=utf-8',
-        type: 'POST',
-        success: function (response) {
-            console.log("no error")
-            console.log(response);
-        },
-        error: function (error) {
-            console.log("error")
-            console.log(error);
-        }
-    });
-    /*
-    $.ajax({
-        url: url,
-        data: img,
-        contentType: 'data:image/png;base64',
-        type: 'POST',
-        success: function (response) {
-            console.log("no error")
-            console.log(response);
-        },
-        error: function (error) {
-            console.log("error")
-            console.log(error);
-        }
-    });*/
+/**
+ * Add image on cavas to queue
+ */
+function addToQueue() {
+    queue.push(canvas.toDataURL('image/png'))
 }
 
-function requestClear(){
-
-    var url = baseUrl + 'clear'
-    $.ajax({
-        url: url,
-        type: 'POST',
-        success: function (response) {
-            console.log("no error")
-            console.log(response);
-        },
-        error: function (error) {
-            console.log("error")
-            console.log(error);
-        }
-    });
+/**
+ * Clear queue and canvas.
+ */
+function clear() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    queue = [];
 }
 
+/**
+ * On Mouse down, start drawing.
+ */
 $("#canvas").mousedown(function (e) {
     canvas.isDrawing = true;
     //get mouase position relative to canvas
@@ -110,7 +74,11 @@ $("#canvas").mousedown(function (e) {
     ctx.drawCircle(lastX, lastY, radius, colour);
 });
 
+/**
+ * On touch start, startdrawing.
+ */
 canvas.addEventListener("touchstart", function (e) {
+    // prvent other action like scrolling 
     if (e.target == canvas) {
         e.preventDefault();
     }
@@ -118,15 +86,16 @@ canvas.addEventListener("touchstart", function (e) {
     var touch = e.touches[0];
     lastX = touch.clientX - canvasPosition.x;
     lastY = touch.clientY - canvasPosition.y;
-
     //Draw first circle
     ctx.drawCircle(lastX, lastY, radius, colour);
 }, false);
 
+/**
+ * Mousemove, circles are draw in every call then line is draw beetwen them.
+ */
 $(canvas).on('mousemove ', function (e) {
     //only draw after mouse is down
     if (canvas.isDrawing) {
-
         canvasPosition.x = canvas.offsetLeft;
         canvasPosition.y = canvas.offsetTop;
 
@@ -134,19 +103,15 @@ $(canvas).on('mousemove ', function (e) {
         x = e.pageX - canvasPosition.x;
         y = e.pageY - canvasPosition.y;
 
-        //   var fillColor = colour;
         ctx.drawCircle(x, y, radius, colour);
-
         //distance beetwen this and last draw
         var distance = Math.sqrt(Math.pow((lastX - x), 2) + Math.pow(lastY - y, 2));
-
         // if the distance is bigger than the radius we will draw a line between the 2 points.
         if (distance > canvas.space) {
             ctx.beginPath();
             ctx.moveTo(lastX, lastY);
             ctx.lineWidth = radius * 2;
             ctx.lineTo(x, y);
-
             ctx.stroke();
         }
         // save position for next iteration      
@@ -155,6 +120,9 @@ $(canvas).on('mousemove ', function (e) {
     }
 });
 
+/**
+ * Touchmove event, draw circle every call and lines beetwen actual and last.
+ */
 canvas.addEventListener("touchmove", function (e) {
     if (e.target == canvas) {
         e.preventDefault();
@@ -164,10 +132,8 @@ canvas.addEventListener("touchmove", function (e) {
         canvasPosition.y = canvas.offsetTop;
 
         var touch = e.touches[0];
-
         x = touch.clientX - canvasPosition.x;
         y = touch.clientY - canvasPosition.y;
-        //   var fillColor = colour;
         ctx.drawCircle(x, y, radius, colour);
 
         //distance beetwen this and last draw
@@ -188,18 +154,18 @@ canvas.addEventListener("touchmove", function (e) {
     }
 }, false);
 
-//end drawing
+
+/**
+ * OnMouseup, stop drawind and add image on canvas to queue.
+ */
 $(canvas).on('mouseup ', function (e) {
     canvas.isDrawing = false;
-    
-    var img = canvas.toDataURL('image/png');
-    
-    
-    queue.push(img)
-    //sendImage();
-
+    addToQueue();
 });
 
+/**
+ * touchend event, stop drawind and add image on canvas to queue.
+ */
 canvas.addEventListener("touchend", function (e) {
     if (e.target == canvas) {
         e.preventDefault();
@@ -207,36 +173,39 @@ canvas.addEventListener("touchend", function (e) {
     canvas.isDrawing = false;
     var img = canvas.toDataURL('image/png');
     queue.push(img)
-    //sendImage();
+
 }, false);
 
-$(canvas).on('mouseleave ', function (e){
+/**
+ * OnMouseleave, stop drawing.
+ */
+$(canvas).on('mouseleave ', function (e) {
     canvas.isDrawing = false;
-    //queue.push(canvas.toDataURL('image/png'))
-    //sendImage();
 });
 
+/**
+ * touch leave event, stop drawing.
+ */
 canvas.addEventListener("touchleave", function (e) {
     if (e.target == canvas) {
         e.preventDefault();
     }
     canvas.isDrawing = false;
-    //queue.push(canvas.toDataURL('image/png'))
-    //sendImage();
 }, false);
 
+/**
+ * Clear button, crear canvas and queue.
+ */
 $("#clearButton").click(function () {
-
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    requestClear();
-    queue = []
+    clear();
 });
 
+/**
+ * Process button, send img of queue, clear queue and clear canvas.
+ */
 $("#processButton").click(function () {
     var url = baseUrl + 'imgs';
     $('#spi').removeClass('invisible');
-
-  
     var imgs = JSON.stringify(queue);
     $.ajax({
         url: url,
@@ -248,31 +217,19 @@ $("#processButton").click(function () {
             $('#prediction').removeClass('invisible');
             // show prediction
             $('#prediction').html(response);
+            clear();
         },
         error: function (error) {
             console.log("error")
             console.log(error);
         }
     });
-    /*
-    $.ajax({
-        url: url,
-        type: 'GET',
-        success: function (response) {
-            // make spiner not visible and result visible
-            $('#spi').addClass('invisible');
-            $('#prediction').removeClass('invisible');
-            // show prediction
-            $('#prediction').html(response);
-        },
-        error: function (error) {
-            console.log(error);
-        }
-    });*/
 });
 
+/**
+ * Change brush radius.
+ */
 $('#formControlRange').on('input change', function (e) {
-    console.log($(this).val());
     radius = parseInt($(this).val());
 });
 
