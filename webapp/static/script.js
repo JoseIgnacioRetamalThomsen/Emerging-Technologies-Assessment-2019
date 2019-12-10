@@ -1,4 +1,5 @@
-var baseUrl = 'http://192.168.43.57:5000/'
+//var baseUrl = 'http://192.168.43.57:5000/'
+var baseUrl = 'http://127.0.0.1:5000/'
 var radius = 5;
 var colour = '#000000';
 var background = 'white'
@@ -19,6 +20,8 @@ canvasBox.appendChild(canvas);
 if (typeof G_vmlCanvasManager != 'undefined') {
     canvas = G_vmlCanvasManager.initElement(canvas);
 }
+
+var queue = [];
 
 ctx = canvas.getContext("2d");
 
@@ -45,7 +48,26 @@ ctx.drawCircle = function (x, y, r, color) {
 function sendImage(){
     // we send image after each up or touch end
     var img = canvas.toDataURL('image/png');
+    
+    quque.push(img)
+
     var url = baseUrl + 'imgs';
+    var data1 = JSON.stringify(imgs);
+    $.ajax({
+        url: url,
+        data: data1,
+        contentType: 'application/json; charset=utf-8',
+        type: 'POST',
+        success: function (response) {
+            console.log("no error")
+            console.log(response);
+        },
+        error: function (error) {
+            console.log("error")
+            console.log(error);
+        }
+    });
+    /*
     $.ajax({
         url: url,
         data: img,
@@ -59,7 +81,7 @@ function sendImage(){
             console.log("error")
             console.log(error);
         }
-    });
+    });*/
 }
 
 function requestClear(){
@@ -169,7 +191,12 @@ canvas.addEventListener("touchmove", function (e) {
 //end drawing
 $(canvas).on('mouseup ', function (e) {
     canvas.isDrawing = false;
-    sendImage();
+    
+    var img = canvas.toDataURL('image/png');
+    
+    
+    queue.push(img)
+    //sendImage();
 
 });
 
@@ -178,11 +205,14 @@ canvas.addEventListener("touchend", function (e) {
         e.preventDefault();
     }
     canvas.isDrawing = false;
-    sendImage();
+    var img = canvas.toDataURL('image/png');
+    queue.push(img)
+    //sendImage();
 }, false);
 
 $(canvas).on('mouseleave ', function (e){
     canvas.isDrawing = false;
+    //queue.push(canvas.toDataURL('image/png'))
     //sendImage();
 });
 
@@ -191,6 +221,7 @@ canvas.addEventListener("touchleave", function (e) {
         e.preventDefault();
     }
     canvas.isDrawing = false;
+    //queue.push(canvas.toDataURL('image/png'))
     //sendImage();
 }, false);
 
@@ -198,11 +229,32 @@ $("#clearButton").click(function () {
 
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     requestClear();
+    queue = []
 });
 
 $("#processButton").click(function () {
     var url = baseUrl + 'imgs';
     $('#spi').removeClass('invisible');
+
+  
+    var imgs = JSON.stringify(queue);
+    $.ajax({
+        url: url,
+        data: imgs,
+        contentType: 'application/json; charset=utf-8',
+        type: 'POST',
+        success: function (response) {
+            $('#spi').addClass('invisible');
+            $('#prediction').removeClass('invisible');
+            // show prediction
+            $('#prediction').html(response);
+        },
+        error: function (error) {
+            console.log("error")
+            console.log(error);
+        }
+    });
+    /*
     $.ajax({
         url: url,
         type: 'GET',
@@ -216,7 +268,7 @@ $("#processButton").click(function () {
         error: function (error) {
             console.log(error);
         }
-    });
+    });*/
 });
 
 $('#formControlRange').on('input change', function (e) {

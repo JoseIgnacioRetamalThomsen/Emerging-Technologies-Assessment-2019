@@ -45,14 +45,39 @@ def add_img():
     # add images to queue
     if request.method == "POST":
         # get data from request
-        image64 = request.data.decode("utf-8")
-        # remove header
-        data = re.sub('data:image/png;base64,', '', image64)
-        # open image as grayscale
-        img = Image.open(BytesIO(b64.b64decode(data))).convert('LA')
-        # add image to queue
-        img_queue.append(img)
-        return "OK"
+        imgs = deque([])
+        y = json.loads(request.data)
+        for x in y:
+            image64 = x#.decode("utf-8")
+            # remove header
+            data = re.sub('data:image/png;base64,', '', image64)
+            # open image as grayscale
+            img = Image.open(BytesIO(b64.b64decode(data))).convert('LA')
+            # add image to queue
+            imgs.append(img)
+        rs = ih.divedeQueue(imgs)
+        numb =""
+        # loop rs which contain individual images
+        while True:
+            # end loop if queue empty
+            if(len(rs)==0):
+                 break
+            # get first image
+            img = rs.popleft()
+            # crop image
+            img,x1,x2,x4,x4 = ih.cropImage(img,255)
+            # add simulated raster and put image in pixel center of amss 
+            img = ih.simulateMnist(img)
+            # reshape for use in model
+            img = img.reshape(1,28,28,1)
+            # predict actual number
+            result = model.predict(img)
+            # get value from result vector
+            num = np.argmax(result, axis=-1)[0]
+            # add actual number to result
+            numb+= str(num)
+        return numb
+        
     # process images
     if request.method == "GET":
         # separate images in individual numbers 
