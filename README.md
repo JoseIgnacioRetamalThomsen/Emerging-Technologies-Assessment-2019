@@ -16,21 +16,21 @@ I have use conda for envirmonet setup:
 
 * First Update conda
 
-'' 
+```
 conda update conda
-''
+```
 
 * Create enviroment, will use highest version of python
 
-''
+```
 conda create -n env  anaconda
-''
+```
 
 * Install kenras and tensoflow gpu
 
-''
+```
 conda install -n env -c conda-forge keras tensorflow-gpu
-''
+```
 
 * Activate env for install flask and corse
 
@@ -42,18 +42,19 @@ https://stackoverflow.com/questions/20081338/how-to-activate-an-anaconda-environ
 env activate
 pip install Flask
 pip install -U flask-cors
-''
+```
 
 * Install cors
 
-''
+```
 conda install -n env 
-
+```
 
 serve
 
+```
 pip install tensorflow-serving-api
-
+```
 
 issue  with ssl
 
@@ -62,11 +63,11 @@ solved with
 https://stackoverflow.com/questions/54394764/pip-is-configured-with-locations-that-require-tls-ssl-however-the-ssl-module-i?rq=1
 
 ## Keras
-
+```
 conda install -c conda-forge keras tensorflow-gpu
 
 pip install -U flask-cors
-
+```
 ### How tO run
 
 flask run --host=0.0.0.0 --port=80
