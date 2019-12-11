@@ -1,5 +1,5 @@
-var baseUrl = 'http://192.168.43.57:5000/'
-//var baseUrl = 'http://127.0.0.1:5000/'
+//var baseUrl = 'http://192.168.43.57:5000/'
+var baseUrl = 'http://127.0.0.1:5000/'
 var radius = 5;
 var colour = '#000000';
 var background = 'white'
@@ -8,6 +8,11 @@ var canvasSize = {
     height: 200,
 }
 var canvasId = 'canvas';
+var chart = "";
+var isFirst = 0;
+var num = "";
+var parent;
+var charts = []
 
 var canvasBox = document.getElementById('canvas_container');
 var canvas = document.createElement("canvas");
@@ -213,11 +218,12 @@ $("#processButton").click(function () {
         contentType: 'application/json; charset=utf-8',
         type: 'POST',
         success: function (response) {
+            r = JSON.parse(response)
             $('#spi').addClass('invisible');
             $('#prediction').removeClass('invisible');
             // show prediction
-            $('#prediction').html(response);
-            clear();
+            $('#prediction').html(r[0]);
+            diplay(r)
         },
         error: function (error) {
             console.log("error")
@@ -232,4 +238,49 @@ $("#processButton").click(function () {
 $('#formControlRange').on('input change', function (e) {
     radius = parseInt($(this).val());
 });
+
+//code modified from https://bensonruan.com/handwritten-digit-recognition-with-tensorflow-js/
+function createChart(label, prediction) {
+    var numberStr = prediction[0];
+    parent = $("#result_box").children();
+    for (var i = 1; i < prediction.length; i++) {
+        num = numberStr[i - 1];
+        parent[i - 1].width = 100;
+        parent[i - 1].height = 100;
+        var ctx = parent[i - 1].getContext('2d');
+        chart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: label,
+                datasets: [{
+                    label: num,
+                    backgroundColor: 'blue',
+                    borderColor: 'black',
+                    data: prediction[i][0],
+                }]
+            },
+
+            // Configuration options go here
+            options: {}
+        });
+        charts.push(chart);
+    }
+}
+
+
+function diplay(data) {
+    label = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"];
+    if (isFirst == 0) {
+        createChart(label, data);
+        isFirst = 1;
+    } else {
+        for (var i = 0; i < charts.length; i++) {
+            charts[i].destroy()
+        }
+        createChart(label, data);
+    }
+    for (var i = 0; i < parent.length; i++) {
+        parent[i].style.display = "block";
+    }
+}
 
