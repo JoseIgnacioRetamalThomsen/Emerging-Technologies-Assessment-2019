@@ -114,19 +114,7 @@ set PATH=C:\Anaconda\envs\env\Scripts;C:\Anaconda\envs\env;%PATH%
 conda install -n env 
 ```
 
-serve
-
-```
-pip install tensorflow-serving-api
-```
-
-issue  with ssl
-
-solved with 
-
-https://stackoverflow.com/questions/54394764/pip-is-configured-with-locations-that-require-tls-ssl-however-the-ssl-module-i?rq=1
-
-## Keras
+* Keras
 
 ```
 conda install -c conda-forge keras tensorflow-gpu
