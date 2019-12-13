@@ -11,7 +11,7 @@ The application has been developed as part of Emerging Technologies course in Ga
   
 A convolutional neural network created with Keras Tensorflow backend have been trained using Mnist dataset. The training process is documented in the Jupyter notebook. We show how the model improves by adding different layers, changing activation function and using augmented data.
 
- [Model](linktomodel.com)
+ [Model](https://nbviewer.jupyter.org/github/JoseIgnacioRetamalThomsen/Emerging-Technologies-Assessment-2019/blob/master/model/Model.ipynb)
 
 ### Web app
 
