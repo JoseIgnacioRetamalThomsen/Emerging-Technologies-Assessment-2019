@@ -141,45 +141,45 @@ https://towardsdatascience.com/deploying-keras-models-using-tensorflow-serving-a
 
 # References
 
-http://yann.lecun.com/exdb/mnist/
+[MNIST data set](http://yann.lecun.com/exdb/mnist/)
 
-https://chortle.ccsu.edu/AssemblyTutorial/Chapter-15/ass15_3.html
+[Big Endian and Little Endian](https://chortle.ccsu.edu/AssemblyTutorial/Chapter-15/ass15_3.html)
 
-http://neuralnetworksanddeeplearning.com/chap1.html
+[Using neural nets to recognize handwritten digits](http://neuralnetworksanddeeplearning.com/chap1.html)
 
-https://github.com/ianmcloughlin/jupyter-teaching-notebooks/blob/master/keras-neurons.ipynb
+[Neurons in keras](https://github.com/ianmcloughlin/jupyter-teaching-notebooks/blob/master/keras-neurons.ipynb)
 
-https://www.analyticsvidhya.com/blog/2017/10/fundamentals-deep-learning-activation-functions-when-to-use-them/
+[Activation Functions] (https://www.analyticsvidhya.com/blog/2017/10/fundamentals-deep-learning-activation-functions-when-to-use-them/)
 
-https://peltarion.com/knowledge-center/documentation/modeling-view/build-an-ai-model/loss-functions/categorical-crossentropy
+[Categorical crossentropy](https://peltarion.com/knowledge-center/documentation/modeling-view/build-an-ai-model/loss-functions/categorical-crossentropy)
 
-https://algorithmia.com/blog/introduction-to-loss-functions
+[Introduction to Loss Functions](https://algorithmia.com/blog/introduction-to-loss-functions)
 
-https://www.kdnuggets.com/2017/04/simple-understand-gradient-descent-algorithm.html
+[Gradient Descent](https://www.kdnuggets.com/2017/04/simple-understand-gradient-descent-algorithm.html)
 
-https://https://algorithmia.com/blog/introduction-to-optimizers.com/blog/introduction-to-optimizers
+[Introduction to Optimizers](https://algorithmia.com/blog/introduction-to-optimizers)
 
-https://medium.com/@danqing/a-practical-guide-to-relu-b83ca804f1f7
+[Relu](https://medium.com/@danqing/a-practical-guide-to-relu-b83ca804f1f7)
 
-https://datascience.stackexchange.com/questions/14349/difference-of-activation-functions-in-neural-networks-in-general
+[Difference of Activation Functions in Neural Networks in general](https://datascience.stackexchange.com/questions/14349/difference-of-activation-functions-in-neural-networks-in-general)
 
-https://machinelearningmastery.com/dropout-regularization-deep-learning-models-keras/
+[Dropout](https://machinelearningmastery.com/dropout-regularization-deep-learning-models-keras/)
 
-https://towardsdatascience.com/a-comprehensive-guide-to-convolutional-neural-networks-the-eli5-way-3bd2b1164a53
+[A Comprehensive Guide to Convolutional Neural Networks ](https://towardsdatascience.com/a-comprehensive-guide-to-convolutional-neural-networks-the-eli5-way-3bd2b1164a53)
 
-https://www.geeksforgeeks.org/cnn-introduction-to-pooling-layer/
+[Introduction to Pooling Layer](https://www.geeksforgeeks.org/cnn-introduction-to-pooling-layer/)
 
-https://machinelearningmastery.com/pooling-layers-for-convolutional-neural-networks/
+[A Gentle Introduction to Pooling Layers for Convolutional Neural Networks](https://machinelearningmastery.com/pooling-layers-for-convolutional-neural-networks/)
 
-https://arxiv.org/pdf/1502.03167v2.pdf
+[Batch Normalization](https://arxiv.org/pdf/1502.03167v2.pdf)
 
-https://towardsdatascience.com/batch-normalization-in-neural-networks-1ac91516821c
+[Batch normalization in Neural Networks](https://towardsdatascience.com/batch-normalization-in-neural-networks-1ac91516821c)
 
-https://medium.com/nanonets/how-to-use-deep-learning-when-you-have-limited-data-part-2-data-augmentation-c26971dc8ced
+[Data Augmentation | How to use Deep Learning when you have Limited Data](https://medium.com/nanonets/how-to-use-deep-learning-when-you-have-limited-data-part-2-data-augmentation-c26971dc8ced)
 
- https://github.com/yashk2810/MNIST-Keras/blob/master/Notebook/MNIST_keras_CNN-99.55%25.ipynb
+ [MNIST_keras_CNN-99.55%](https://github.com/yashk2810/MNIST-Keras/blob/master/Notebook/MNIST_keras_CNN-99.55%25.ipynb)
 
- https://www.tensorflow.org/guide/keras/
+ [tensorflow guide](https://www.tensorflow.org/guide/keras/)
 
 
 
