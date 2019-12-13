@@ -8,7 +8,7 @@ from flask_cors import CORS
 import tensorflow as tf
 import sys
 import logging
-from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
+#from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
 import urllib.request
 import base64 as b64
 from PIL import Image
@@ -17,57 +17,54 @@ import re
 import imagehelper as ih
 from collections import deque
 
-
 app = fl.Flask(__name__)
 CORS(app)
-
-if __name__ == '__main__':
-    app.run(host='0.0.0.0', port='8000')
-# app.run(host='0.0.0.0',port=5001)
 
 # import the model
 tf.keras.backend.set_learning_phase(0)  # Ignore dropout at interface
 model = load_model('../model/static/model.h5')
 
-
 # Add index route
 @app.route('/')
 def home():
+    """
+    Main route return static index.
+    """
     return app.send_static_file('index.html')
 
 @app.route("/imgs", methods=["POST", "GET"])
-def add_img():
-    # add images to queue
+def predict():
+    """
+    Main end point get, get a array of images in json format 
+    Responde wiht a json array compose by predictions.
+    """
+  
     if request.method == "POST":
-        imgs = processRequestData(request.data)
-        rs = ih.divedeQueue(imgs)
-        prediction = predictFromQueue(rs)
-        
-        return json.dumps(prediction)
-        # numb =""
-        # # loop rs which contain individual images
-        # while True:
-        #     # end loop if queue empty
-        #     if(len(rs)==0):
-        #          break
-        #     # get first image
-        #     img = rs.popleft()
-        #     # crop image
-        #     img,x1,x2,x4,x4 = ih.cropImage(img,255)
-        #     # add simulated raster and put image in pixel center of amss 
-        #     img = ih.simulateMnist(img)
-        #     # reshape for use in model
-        #     img = img.reshape(1,28,28,1)
-        #     # predict actual number
-        #     result = model.predict(img)
-        #     # get value from result vector
-        #     num = np.argmax(result, axis=-1)[0]
-        #     # add actual number to result
-        #     numb+= str(num)
-        # return numb
+        try:
+            #Parse request into a list of images
+            imgs = processRequestData(request.data)
+            # Create single number images from list
+            rs = ih.divedeQueue(imgs)
+            # Make a prediction for each single image
+            prediction = predictFromQueue(rs)
+            # Response json list
+            return json.dumps(prediction)
+        except:
+            return  "Not posible to process request", 400
 
+
+#############
+# Utilities #
+#############
 
 def processRequestData(jsonRequest):
+    """
+    Process request from client.
+    Request is a json array with pictures,
+    Parse pictures and append them into a queue.
+    :param jsonRequest: Json binary request.
+    :return: queue with images.
+    """
     imgs = deque([])
     y = json.loads(jsonRequest)
     for x in y:
@@ -81,6 +78,11 @@ def processRequestData(jsonRequest):
     return imgs
 
 def predictFromQueue(imgQueue):
+    """
+    Generate preditions from a list of images.
+    :param imgQueue: List of images.
+    :return: list with prediction, first element in the list is all predictions on a strins.
+    """
     response = []
     response.append("")
     numb =""
@@ -105,5 +107,5 @@ def predictFromQueue(imgQueue):
         numb+= str(num)
     response[0] = numb
     return response
-# if __name__ == '__main__':
-#     app.run(host="192.168.43.57")
+
+ 

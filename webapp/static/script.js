@@ -1,5 +1,5 @@
-//var baseUrl = 'http://192.168.43.57:5000/'
-var baseUrl = 'http://127.0.0.1:5000/'
+var baseUrl = 'http://192.168.43.57:5000/'
+//var baseUrl = 'http://127.0.0.1:5000/'
 var radius = 5;
 var colour = '#000000';
 var background = 'white'
