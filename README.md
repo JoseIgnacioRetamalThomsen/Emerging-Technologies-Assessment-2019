@@ -1,7 +1,7 @@
 # Handwritten digit recognition
 
 
-This software allows to convert handwritten digits into computer form. The software has been developed in two stages: first a model was trained using Keras with Tensorflow as backend. Then that model has been used for creating a web app that allow the user to draw digits for making a prediction with the model that was first trained.
+This software allows to convert handwritten digits into computer form. The software has been developed in two stages: first a model created using Keras with Tensorflow as backend and then trained on MNIST dataset. Then that model has been used for creating a web app that allow the user to draw digits for making a prediction with the model that was first trained.
 
 
 The application has been developed as part of Emerging Technologies course in Galway-Mayo Institute of Technologies.
