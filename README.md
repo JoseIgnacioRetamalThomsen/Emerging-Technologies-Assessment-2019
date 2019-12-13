@@ -134,21 +134,6 @@ conda install -c conda-forge keras tensorflow-gpu
 pip install -U flask-cors
 ```
 
-### How tO run
-
-
-```
-flask run --host=0.0.0.0 --port=80
-```
-
-### Contact
-
-
-for kenras 
-https://towardsdatascience.com/deploying-keras-models-using-tensorflow-serving-and-flask-508ba00f1037
-
-
-
 ## Technologies
 
 [Keras](https://keras.io/),  Deep learning library for python.
