@@ -138,7 +138,7 @@ pip install -U flask-cors
 
 [Python](https://www.python.org/), programing language.
 
-[CharJS](]https://www.chartjs.org/), charts with javascript.
+[CharJS](https://www.chartjs.org/), charts with javascript.
 
 [Jupyter Notebook](https://jupyter.org/), interactive development enviroment.
 
