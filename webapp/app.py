@@ -1,5 +1,5 @@
 # Jose I Retamal
-# Emerging Technologies 
+# Emerging Technologies
 # GMIT 2019
 
 # modified from : https://palletsprojects.com/p/flask/
@@ -20,6 +20,8 @@ from io import BytesIO
 import re
 import imagehelper as ih
 from collections import deque
+import os
+
 
 app = fl.Flask(__name__)
 CORS(app)
@@ -36,30 +38,26 @@ def home():
     """
     return app.send_static_file('index.html')
 
+
 @app.route("/imgs", methods=["POST", "GET"])
 def predict():
     """
     Main end point get, get a array of images in json format 
     Responde wiht a json array compose by predictions.
     """
-  
     if request.method == "POST":
-        try:
-            #Parse request into a list of images
-            imgs = processRequestData(request.data)
-            # Create single number images from list
-            rs = ih.divedeQueue(imgs)
-            # Make a prediction for each single image
-            prediction = predictFromQueue(rs)
-            # Response json list
-            return json.dumps(prediction)
-        except:
-            return  "Not posible to process request", 400
+            try:
+                # Parse request into a list of images
+                imgs = processRequestData(request.data)
+                # Create single number images from list
+                rs = ih.divedeQueue(imgs)
+                # Make a prediction for each single image
+                prediction = predictFromQueue(rs)
+                # Response json list
+                return json.dumps(prediction)
+            except:
+                return "Not posible to process request", 400
 
-
-#############
-# Utilities #
-#############
 
 def processRequestData(jsonRequest):
     """
@@ -72,7 +70,7 @@ def processRequestData(jsonRequest):
     imgs = deque([])
     y = json.loads(jsonRequest)
     for x in y:
-        image64 = x#.decode("utf-8")
+        image64 = x  # .decode("utf-8")
         # remove header
         data = re.sub('data:image/png;base64,', '', image64)
         # open image as grayscale
@@ -80,6 +78,7 @@ def processRequestData(jsonRequest):
         # add image to queue
         imgs.append(img)
     return imgs
+
 
 def predictFromQueue(imgQueue):
     """
@@ -89,27 +88,25 @@ def predictFromQueue(imgQueue):
     """
     response = []
     response.append("")
-    numb =""
+    numb = ""
     while True:
         # end loop if queue empty
-        if(len(imgQueue)==0):
-                break
+        if(len(imgQueue) == 0):
+            break
         # get first image
         img = imgQueue.popleft()
         # crop image
-        img,x1,x2,x4,x4 = ih.cropImage(img,255)
-        # add simulated raster and put image in pixel center of amss 
+        img, x1, x2, x4, x4 = ih.cropImage(img, 255)
+        # add simulated raster and put image in pixel center of amss
         img = ih.simulateMnist(img)
         # reshape for use in model
-        img = img.reshape(1,28,28,1)
+        img = img.reshape(1, 28, 28, 1)
         # predict actual number
         result = model.predict(img)
         response.append(result.tolist())
         # get value from result vector
         num = np.argmax(result, axis=-1)[0]
         # add actual number to result
-        numb+= str(num)
+        numb += str(num)
     response[0] = numb
     return response
-
- 
