@@ -1,13 +1,62 @@
 # Handwritten digit recognition
 
-This software allows to convert handwritting digis into computer form. 
 
-Implementation:
+This software allows to convert handwritten digits into computer form. The software has been developed in two stages: first a model was trained using Keras with Tensorflow as backend. Then that model has been used for creating a web app that allow the user to draw digits for making a prediction with the model that was first trained.
 
-- Create a neural network using keras tensoflow then train it using Mnist datase.
-- Develop a web app using flask and bootstrap.
 
-### Enviroment Setup
+The application has been developed as part of Emerging Technologies course in Galway-Mayo Institute of Technologies.
+
+
+### Model
+  
+A convolutional neural network created with Keras Tensorflow backend have been trained using Mnist dataset. The training process is documented in the Jupyter notebook. We show how the model improves by adding different layers, changing activation function and using augmented data.
+
+ [Model](linktomodel.com)
+
+### Web app
+
+The client has been design using bootstrap and chartjs. Its allow the user to draw a number using the mouse or touchscreen device, that can be composed by several digits. A sequence of images of how the number was draw is used for separate it in digits for them make individual predictions. The sequence is sent to a Flask application which processes the images for then response back with the prediction.
+
+[Flask Web App](https://github.com/JoseIgnacioRetamalThomsen/Emerging-Technologies-Assessment-2019/blob/master/webapp/app.py)
+ 
+
+ ## How to run
+ 
+You may need to setup python environment as explained before. Anaconda have been used for install all packages so is the easiest way, you can install al packages separate if you want.
+
+* Clone this repository
+
+```
+git clone https://github.com/JoseIgnacioRetamalThomsen/Emerging-Technologies-Assessment-2019.git
+
+```
+
+* go into folder and run flask
+
+```
+cd Emerging-Technologies-Assessment-2019/webapp
+env flask run --host=0.0.0.0 --port=5000
+```
+
+* Use if want to remotly acces the app:
+
+```
+flask run --host=0.0.0.0 --port=5000
+```
+
+* You can acces app usign a web browser by the address 
+
+```
+http://127.0.0.1:5000/
+```
+
+or
+
+```
+http://%SERVER-IP%:5000/
+```
+
+## Enviroment Setup
 
 Setup envirment using conda
 https://uoa-eresearch.github.io/eresearch-cookbook/recipe/2014/11/20/conda/
@@ -16,33 +65,48 @@ I have use conda for envirmonet setup:
 
 * First Update conda
 
+
 ```
 conda update conda
+
 ```
+
 
 * Create enviroment, will use highest version of python
 
+
 ```
 conda create -n env  anaconda
+
 ```
 
 * Install kenras and tensoflow gpu
 
+
 ```
 conda install -n env -c conda-forge keras tensorflow-gpu
+
 ```
 
-* Activate env for install flask and corse
 
-Path must be set ex: set PATH=C:\Anaconda\envs\env\Scripts;C:\Anaconda\envs\env;%PATH%
+* Activate env, install flask and corse
 
-https://stackoverflow.com/questions/20081338/how-to-activate-an-anaconda-environment
+```
 
-''
 env activate
 pip install Flask
 pip install -U flask-cors
+
 ```
+
+
+* Set path for enviroment from [https://stackoverflow.com/questions/20081338/how-to-activate-an-anaconda-environment](https://stackoverflow.com/questions/20081338/how-to-activate-an-anaconda-environment)
+
+```
+set PATH=C:\Anaconda\envs\env\Scripts;C:\Anaconda\envs\env;%PATH%
+
+```
+
 
 * Install cors
 
@@ -63,84 +127,89 @@ solved with
 https://stackoverflow.com/questions/54394764/pip-is-configured-with-locations-that-require-tls-ssl-however-the-ssl-module-i?rq=1
 
 ## Keras
+
 ```
 conda install -c conda-forge keras tensorflow-gpu
 
 pip install -U flask-cors
 ```
+
 ### How tO run
 
+
+```
 flask run --host=0.0.0.0 --port=80
+```
+
 ### Contact
 
 
 for kenras 
 https://towardsdatascience.com/deploying-keras-models-using-tensorflow-serving-and-flask-508ba00f1037
 
-93% -> 32 5x5, 64 3x3 , max poling 2x2 , flaten _> 128 , 10
+
 
 ## Technologies
 
-https://keras.io/  Deep learning library for python
+[Keras](https://keras.io/),  Deep learning library for python.
 
-https://www.tensorflow.org/ BAck end for keras
+[Tensorflow](https://www.tensorflow.org/) Back end for keras.
 
-https://www.anaconda.com/ Python package
+[Anaconda](https://www.anaconda.com/) Python package.
 
-https://www.palletsprojects.com/p/flask/ Web app framework
+[Flask](https://www.palletsprojects.com/p/flask/), web app framework.
 
-https://jquery.com/ Javascript libarary
+[JQuery](https://jquery.com/) Javascript libarary.
 
-https://getbootstrap.com/ Web develop toolkit
+[Bootstrap](https://getbootstrap.com/), web develop toolkit.
 
-https://www.python.org/ Programing language
+[Python](https://www.python.org/), programing language.
 
-https://www.chartjs.org/ Easy charts with javascript
+[CharJS](]https://www.chartjs.org/), charts with javascript.
 
-
-https://jupyter.org/ Interactive development enviroment.
+[Jupyter Notebook](https://jupyter.org/), interactive development enviroment.
 
 # References
 
-http://yann.lecun.com/exdb/mnist/
+[MNIST data set](http://yann.lecun.com/exdb/mnist/)
 
-https://chortle.ccsu.edu/AssemblyTutorial/Chapter-15/ass15_3.html
+[Big Endian and Little Endian](https://chortle.ccsu.edu/AssemblyTutorial/Chapter-15/ass15_3.html)
 
-http://neuralnetworksanddeeplearning.com/chap1.html
+[Using neural nets to recognize handwritten digits](http://neuralnetworksanddeeplearning.com/chap1.html)
 
-https://github.com/ianmcloughlin/jupyter-teaching-notebooks/blob/master/keras-neurons.ipynb
+[Neurons in keras](https://github.com/ianmcloughlin/jupyter-teaching-notebooks/blob/master/keras-neurons.ipynb)
 
-https://www.analyticsvidhya.com/blog/2017/10/fundamentals-deep-learning-activation-functions-when-to-use-them/
+[Activation Functions](https://www.analyticsvidhya.com/blog/2017/10/fundamentals-deep-learning-activation-functions-when-to-use-them/)
 
-https://peltarion.com/knowledge-center/documentation/modeling-view/build-an-ai-model/loss-functions/categorical-crossentropy
+[Categorical crossentropy](https://peltarion.com/knowledge-center/documentation/modeling-view/build-an-ai-model/loss-functions/categorical-crossentropy)
 
-https://algorithmia.com/blog/introduction-to-loss-functions
+[Introduction to Loss Functions](https://algorithmia.com/blog/introduction-to-loss-functions)
 
-https://www.kdnuggets.com/2017/04/simple-understand-gradient-descent-algorithm.html
+[Gradient Descent](https://www.kdnuggets.com/2017/04/simple-understand-gradient-descent-algorithm.html)
 
-https://https://algorithmia.com/blog/introduction-to-optimizers.com/blog/introduction-to-optimizers
+[Introduction to Optimizers](https://algorithmia.com/blog/introduction-to-optimizers)
 
-https://medium.com/@danqing/a-practical-guide-to-relu-b83ca804f1f7
+[Relu](https://medium.com/@danqing/a-practical-guide-to-relu-b83ca804f1f7)
 
-https://datascience.stackexchange.com/questions/14349/difference-of-activation-functions-in-neural-networks-in-general
+[Difference of Activation Functions in Neural Networks in general](https://datascience.stackexchange.com/questions/14349/difference-of-activation-functions-in-neural-networks-in-general)
 
-https://machinelearningmastery.com/dropout-regularization-deep-learning-models-keras/
+[Dropout](https://machinelearningmastery.com/dropout-regularization-deep-learning-models-keras/)
 
-https://towardsdatascience.com/a-comprehensive-guide-to-convolutional-neural-networks-the-eli5-way-3bd2b1164a53
+[A Comprehensive Guide to Convolutional Neural Networks ](https://towardsdatascience.com/a-comprehensive-guide-to-convolutional-neural-networks-the-eli5-way-3bd2b1164a53)
 
-https://www.geeksforgeeks.org/cnn-introduction-to-pooling-layer/
+[Introduction to Pooling Layer](https://www.geeksforgeeks.org/cnn-introduction-to-pooling-layer/)
 
-https://machinelearningmastery.com/pooling-layers-for-convolutional-neural-networks/
+[A Gentle Introduction to Pooling Layers for Convolutional Neural Networks](https://machinelearningmastery.com/pooling-layers-for-convolutional-neural-networks/)
 
-https://arxiv.org/pdf/1502.03167v2.pdf
+[Batch Normalization](https://arxiv.org/pdf/1502.03167v2.pdf)
 
-https://towardsdatascience.com/batch-normalization-in-neural-networks-1ac91516821c
+[Batch normalization in Neural Networks](https://towardsdatascience.com/batch-normalization-in-neural-networks-1ac91516821c)
 
-https://medium.com/nanonets/how-to-use-deep-learning-when-you-have-limited-data-part-2-data-augmentation-c26971dc8ced
+[Data Augmentation | How to use Deep Learning when you have Limited Data](https://medium.com/nanonets/how-to-use-deep-learning-when-you-have-limited-data-part-2-data-augmentation-c26971dc8ced)
 
- https://github.com/yashk2810/MNIST-Keras/blob/master/Notebook/MNIST_keras_CNN-99.55%25.ipynb
+ [MNIST_keras_CNN-99.55%](https://github.com/yashk2810/MNIST-Keras/blob/master/Notebook/MNIST_keras_CNN-99.55%25.ipynb)
 
- https://www.tensorflow.org/guide/keras/
+ [tensorflow guide](https://www.tensorflow.org/guide/keras/)
 
 
 
