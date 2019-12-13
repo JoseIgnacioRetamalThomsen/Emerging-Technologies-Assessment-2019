@@ -1,4 +1,9 @@
+# Jose I Retamal
+# Emerging Technologies 
+# GMIT 2019
+
 # modified from : https://palletsprojects.com/p/flask/
+
 import flask as fl
 from flask import escape, request
 from keras.models import load_model
@@ -8,7 +13,6 @@ from flask_cors import CORS
 import tensorflow as tf
 import sys
 import logging
-#from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
 import urllib.request
 import base64 as b64
 from PIL import Image
