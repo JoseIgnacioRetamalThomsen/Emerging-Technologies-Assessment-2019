@@ -59,7 +59,7 @@ conda install -n env -c conda-forge keras tensorflow-gpu
 ```
 
 
-* Activate env for install flask and corse
+* Activate env, install flask and corse
 
 ```
 
@@ -123,21 +123,21 @@ https://towardsdatascience.com/deploying-keras-models-using-tensorflow-serving-a
 
 [Keras](https://keras.io/),  Deep learning library for python.
 
-[Tensorflow](https://www.tensorflow.org/) Back end for keras
+[Tensorflow](https://www.tensorflow.org/) Back end for keras.
 
-https://www.anaconda.com/ Python package
+[Anaconda](https://www.anaconda.com/) Python package.
 
-https://www.palletsprojects.com/p/flask/ Web app framework
+[Flask](https://www.palletsprojects.com/p/flask/), web app framework.
 
-https://jquery.com/ Javascript libarary
+[JQuery](https://jquery.com/) Javascript libarary.
 
-https://getbootstrap.com/ Web develop toolkit
+[Bootstrap](https://getbootstrap.com/), web develop toolkit.
 
-https://www.python.org/ Programing language
+[Python](https://www.python.org/), programing language.
 
-https://www.chartjs.org/ Easy charts with javascript
+[CharJS(]https://www.chartjs.org/), charts with javascript.
 
-https://jupyter.org/ Interactive development enviroment.
+[Jupyter Notebook](https://jupyter.org/), interactive development enviroment.
 
 # References
 
