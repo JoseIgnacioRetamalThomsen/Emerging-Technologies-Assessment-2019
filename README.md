@@ -7,26 +7,56 @@ This software allows to convert handwritten digits into computer form. The softw
 The application has been developed as part of Emerging Technologies course in Galway-Mayo Institute of Technologies.
 
 
-## Model
+### Model
   
 A convolutional neural network created with Keras Tensorflow backend have been trained using Mnist dataset. The training process is documented in the Jupyter notebook. We show how the model improves by adding different layers, changing activation function and using augmented data.
 
  [Model](linktomodel.com)
 
-## Web app
+### Web app
 
 The client has been design using bootstrap and chartjs. Its allow the user to draw a number using the mouse or touchscreen device, that can be composed by several digits. A sequence of images of how the number was draw is used for separate it in digits for them make individual predictions. The sequence is sent to a Flask application which processes the images for then response back with the prediction.
 
 [Flask Web App](https://github.com/JoseIgnacioRetamalThomsen/Emerging-Technologies-Assessment-2019/blob/master/webapp/app.py)
  
 
+ ## How to run
  
-Implementation:
+You may need to setup python environment as explained before. Anaconda have been used for install all packages so is the easiest way, you can install al packages separate if you want.
 
-- Create a neural network using keras tensoflow then train it using Mnist datase.
-- Develop a web app using flask and bootstrap.
+* Clone this repository
 
-### Enviroment Setup
+```
+git clone https://github.com/JoseIgnacioRetamalThomsen/Emerging-Technologies-Assessment-2019.git
+
+```
+
+* go into folder and run flask
+
+```
+cd Emerging-Technologies-Assessment-2019/webapp
+env flask run --host=0.0.0.0 --port=5000
+```
+
+* Use if want to remotly acces the app:
+
+```
+flask run --host=0.0.0.0 --port=5000
+```
+
+* You can acces app usign a web browser by the address 
+
+```
+http://127.0.0.1:5000/
+```
+
+or
+
+```
+http://%SERVER-IP%:5000/
+```
+
+## Enviroment Setup
 
 Setup envirment using conda
 https://uoa-eresearch.github.io/eresearch-cookbook/recipe/2014/11/20/conda/
