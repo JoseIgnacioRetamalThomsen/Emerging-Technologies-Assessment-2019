@@ -35,33 +35,48 @@ I have use conda for envirmonet setup:
 
 * First Update conda
 
+
 ```
 conda update conda
+
 ```
+
 
 * Create enviroment, will use highest version of python
 
+
 ```
 conda create -n env  anaconda
+
 ```
 
 * Install kenras and tensoflow gpu
 
+
 ```
 conda install -n env -c conda-forge keras tensorflow-gpu
+
 ```
+
 
 * Activate env for install flask and corse
 
-Path must be set ex: set PATH=C:\Anaconda\envs\env\Scripts;C:\Anaconda\envs\env;%PATH%
+```
 
-https://stackoverflow.com/questions/20081338/how-to-activate-an-anaconda-environment
-
-''
 env activate
 pip install Flask
 pip install -U flask-cors
+
 ```
+
+
+* Set path for enviroment from [https://stackoverflow.com/questions/20081338/how-to-activate-an-anaconda-environment](https://stackoverflow.com/questions/20081338/how-to-activate-an-anaconda-environment)
+
+```
+set PATH=C:\Anaconda\envs\env\Scripts;C:\Anaconda\envs\env;%PATH%
+
+```
+
 
 * Install cors
 
@@ -82,27 +97,33 @@ solved with
 https://stackoverflow.com/questions/54394764/pip-is-configured-with-locations-that-require-tls-ssl-however-the-ssl-module-i?rq=1
 
 ## Keras
+
 ```
 conda install -c conda-forge keras tensorflow-gpu
 
 pip install -U flask-cors
 ```
+
 ### How tO run
 
+
+```
 flask run --host=0.0.0.0 --port=80
+```
+
 ### Contact
 
 
 for kenras 
 https://towardsdatascience.com/deploying-keras-models-using-tensorflow-serving-and-flask-508ba00f1037
 
-93% -> 32 5x5, 64 3x3 , max poling 2x2 , flaten _> 128 , 10
+
 
 ## Technologies
 
-https://keras.io/  Deep learning library for python
+[Keras](https://keras.io/),  Deep learning library for python.
 
-https://www.tensorflow.org/ BAck end for keras
+[Tensorflow](https://www.tensorflow.org/) Back end for keras
 
 https://www.anaconda.com/ Python package
 
