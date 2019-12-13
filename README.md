@@ -165,7 +165,7 @@ https://towardsdatascience.com/deploying-keras-models-using-tensorflow-serving-a
 
 [Python](https://www.python.org/), programing language.
 
-[CharJS(]https://www.chartjs.org/), charts with javascript.
+[CharJS](]https://www.chartjs.org/), charts with javascript.
 
 [Jupyter Notebook](https://jupyter.org/), interactive development enviroment.
 
@@ -179,7 +179,7 @@ https://towardsdatascience.com/deploying-keras-models-using-tensorflow-serving-a
 
 [Neurons in keras](https://github.com/ianmcloughlin/jupyter-teaching-notebooks/blob/master/keras-neurons.ipynb)
 
-[Activation Functions] (https://www.analyticsvidhya.com/blog/2017/10/fundamentals-deep-learning-activation-functions-when-to-use-them/)
+[Activation Functions](https://www.analyticsvidhya.com/blog/2017/10/fundamentals-deep-learning-activation-functions-when-to-use-them/)
 
 [Categorical crossentropy](https://peltarion.com/knowledge-center/documentation/modeling-view/build-an-ai-model/loss-functions/categorical-crossentropy)
 
