@@ -1,7 +1,26 @@
 # Handwritten digit recognition
 
-This software allows to convert handwritting digis into computer form. 
 
+This software allows to convert handwritten digits into computer form. The software has been developed in two stages: first a model was trained using Keras with Tensorflow as backend. Then that model has been used for creating a web app that allow the user to draw digits for making a prediction with the model that was first trained.
+
+
+The application has been developed as part of Emerging Technologies course in Galway-Mayo Institute of Technologies.
+
+
+## Model
+  
+A convolutional neural network created with Keras Tensorflow backend have been trained using Mnist dataset. The training process is documented in the Jupyter notebook. We show how the model improves by adding different layers, changing activation function and using augmented data.
+
+ [Model](linktomodel.com)
+
+## Web app
+
+The client has been design using bootstrap and chartjs. Its allow the user to draw a number using the mouse or touchscreen device, that can be composed by several digits. A sequence of images of how the number was draw is used for separate it in digits for them make individual predictions. The sequence is sent to a Flask application which processes the images for then response back with the prediction.
+
+[Flask Web App](https://github.com/JoseIgnacioRetamalThomsen/Emerging-Technologies-Assessment-2019/blob/master/webapp/app.py)
+ 
+
+ 
 Implementation:
 
 - Create a neural network using keras tensoflow then train it using Mnist datase.
@@ -96,7 +115,6 @@ https://getbootstrap.com/ Web develop toolkit
 https://www.python.org/ Programing language
 
 https://www.chartjs.org/ Easy charts with javascript
-
 
 https://jupyter.org/ Interactive development enviroment.
 
